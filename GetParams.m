@@ -17,10 +17,12 @@ if ~strcmp(model, 'BCE')
     cellArrangement = input ('C (circular) / 4 (4 nearest neighbours) / 6 (6 nearest neighbours): ', 's');
     if cellArrangement == 'C'
         numofCells = input('How many cells? ');
+        dfo = input('Distance between cells (0 < dfo < 1)? ');
+        CellInfo = struct('Number_of_Cells', numofCells, 'Distance_between_Cells', dfo);
         if numofCells==1
             pts = []; % default - single cell at the origin
         else
-            pts = MCC_circular(numofCells,params.R);
+            pts = MCC_circular(numofCells,params.R, dfo);
         end
     elseif cellArrangement == '4'
         numofCells='4neighbours';
@@ -161,7 +163,11 @@ switch model
 end
 
 config = struct('regParams', regParams, 'params', params,...
-    'modelType', model, 'terms', terms, 'ROR', ROR, 'LOC', LOC, 'cells', pts, 'blMatProp', blmatprop);
+    'modelType', model, 'terms', terms, 'ROR', ROR, 'LOC', LOC,...
+    'cells', pts, 'blMatProp', blmatprop, 'Cells_Information', CellInfo);
+
+save('E:\Ran\Cell-ECM_model_2D_1_cell\csvFiles\Config.mat', 'config')
+
 
 end
 

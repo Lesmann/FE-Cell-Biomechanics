@@ -1,6 +1,4 @@
-function [ cellCoordinates ] = MCC_circular ( numofCells, R )
-
-dfo = 0.1; % distance of cells from the origin
+function [ cellCoordinates ] = MCC_circular ( numofCells, R, dfo )
 
 cellCoordinates=zeros(numofCells,2);
 

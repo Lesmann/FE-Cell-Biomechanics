@@ -4,10 +4,6 @@ format long g
 %% Generalized Write to inp file
 % Writes to a name specified inp file 'fn'
 
-% Write nodes and elements to .csv files
-% nodesStr = num2str(nodes);
-% ElStr = num2str(elements);
-
 % path = 'C:\Users\Naama\Desktop\Research-TAU\MatlabFiles\';
 
 %% Write nodes and elements into .csv files
