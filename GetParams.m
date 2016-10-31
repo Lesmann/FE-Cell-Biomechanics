@@ -5,6 +5,7 @@ function [ config ] = GetParams ()
 
 regParams = struct('sq', 1); % default
 params = struct('iSeed', 0.005, 'R', regParams.sq/2, 'r', regParams.sq/(2*50), 'MOD', 0.1, 'matype', 'required'); % default, MOD = magnitude of displacement (relative to the cell radius)
+CellInfo.Distance_between_Cells = 'None';
 
 % bi-linear (linear with buckling) material properties
 blmatprop = struct('ymod', 1, 'poisr', 0.45, 'type', 'bi-linear', 'n', 100, 'r', 0.5, 'rho', 0.1);
@@ -64,6 +65,9 @@ switch model
         terms.bceType = input('Tension (T) / Compression (C) / Shear (S): ', 's');
         model = strcat(model, '_');
         model = strcat(model, terms.bceType);
+        
+        display('BCE displacement magnitude: ')
+        terms.BCE_Mag = input('Stretch magnitude: ');
         
         display('Radius of Randomness, ranging between 0 and 1');
         ror1 = input('from: ');

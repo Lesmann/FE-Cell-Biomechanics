@@ -117,7 +117,8 @@ for i = 1 : ll
         
         display('Generating Material Properties')
         FN = GenFileName(config.ROR(j)/config.params.iSeed, config.LOC(i),...
-            config.terms.Cells, config.cells, config.modelType, config.blMatProp.type);
+            config.terms.Cells, config.cells, config.Cells_Information.Distance_between_Cells,...
+            config.modelType, config.blMatProp.type, config.terms.BCE_Mag);
         [ mat ] = defmat(config, FN);
         
         %% Generate node-sets from inner nodes
@@ -127,7 +128,7 @@ for i = 1 : ll
         if isempty(config.cells) && strcmp(config.terms.Cells, 'yes')% i.e., a model of a single cell
             ic = Nicirc(El.new, Nodes, config.params.r);  % 'ic' just gives node numbers
         else
-            ic = Nicirc2(El.new, Nodes, config.params.r, config.cells); % ic just gives both node numbers (column 2) and cell numbers (column 1)
+            ic = Nicirc2(El.new, Nodes, config); % ic just gives both node numbers (column 2) and cell numbers (column 1)
         end
         
         if strcmp(config.terms.Cells, 'yes')
@@ -241,6 +242,6 @@ for i = 1 : ll
         
     end
 end
-%tt = num2str(sum(T));
+tt = num2str(sum(T));
 display('Process is completed successfully');
-% display(['Total Time is: ', tt, ' minutes']);
+display(['Total Time is: ', tt, ' minutes']);

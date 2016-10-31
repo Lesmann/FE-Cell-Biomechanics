@@ -33,9 +33,11 @@ for i = 1 : nTotal % Go over all nodes
                 nodes(i, 2) = newy;
             end
         else
-            [ newx, newy ] = cirrdn(x, y, ROR); % Generate coordinates of new node inside the circle
-            nodes(i, 1) = newx; % Initiate coordinates to nodes vector
-            nodes(i, 2) = newy;
+            if abs(x) < config.params.R-3*config.params.iSeed && abs(y) < config.params.R-3*config.params.iSeed
+                [ newx, newy ] = cirrdn(x, y, ROR); % Generate coordinates of new node inside the circle
+                nodes(i, 1) = newx; % Initiate coordinates to nodes vector
+                nodes(i, 2) = newy;
+            end
         end
     end
 end

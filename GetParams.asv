@@ -5,6 +5,7 @@ function [ config ] = GetParams ()
 
 regParams = struct('sq', 1); % default
 params = struct('iSeed', 0.005, 'R', regParams.sq/2, 'r', regParams.sq/(2*50), 'MOD', 0.1, 'matype', 'required'); % default, MOD = magnitude of displacement (relative to the cell radius)
+CellInfo.Distance_between_Cells = 'None';
 
 % bi-linear (linear with buckling) material properties
 blmatprop = struct('ymod', 1, 'poisr', 0.45, 'type', 'bi-linear', 'n', 100, 'r', 0.5, 'rho', 0.1);
@@ -18,7 +19,7 @@ if ~strcmp(model, 'BCE')
     if cellArrangement == 'C'
         numofCells = input('How many cells? ');
         dfo = input('Distance between cells (0 < dfo < 1)? ');
-        CellInfo = struct('Number_of_Cells', numofCells, 'Distance_')
+        CellInfo = struct('Number_of_Cells', numofCells, 'Distance_between_Cells', dfo);
         if numofCells==1
             pts = []; % default - single cell at the origin
         else
@@ -64,6 +65,9 @@ switch model
         terms.bceType = input('Tension (T) / Compression (C) / Shear (S): ', 's');
         model = strcat(model, '_');
         model = strcat(model, terms.bceType);
+        
+        display('BCE displacement magnitude: ')
+        terms.BCE_Mag = input();
         
         display('Radius of Randomness, ranging between 0 and 1');
         ror1 = input('from: ');
@@ -163,7 +167,10 @@ switch model
 end
 
 config = struct('regParams', regParams, 'params', params,...
-    'modelType', model, 'terms', terms, 'ROR', ROR, 'LOC', LOC, 'cells', pts, 'blMatProp', blmatprop);
+    'modelType', model, 'terms', terms, 'ROR', ROR, 'LOC', LOC,...
+    'cells', pts, 'blMatProp', blmatprop, 'Cells_Information', CellInfo);
+
+save('E:\Ran\Cell-ECM_model_2D_1_cell\csvFiles\Config.mat', 'config')
 
 
 end

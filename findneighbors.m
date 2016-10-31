@@ -2,7 +2,8 @@ function [dist2cell, ang2cell] = findneighbors(Cell, Cells, config)
 
 % This function determines which coordinates from the coordinates list 'Cells'
 % is within the neighborhood of the coordinate 'Cell'.
-r = config.Cells_Information.Distance_between_Cells;
+
+% r = config.Cells_Information.Distance_between_Cells;
 
 % find all 'Cells' closest to 'Cell' and their distance from 'Cell'
 [idx, dist2cell] = dsearchn(Cells, Cell);

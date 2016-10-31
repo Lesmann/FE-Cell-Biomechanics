@@ -1,6 +1,6 @@
 function [ U, U1, U2 ] = extract_data( rawdata )
 
-% this function extracts relevant displacement data out of the Abaqus-generated csv
+% this function extracts relevant data out of the Abaqus-generated csv
 % report files
 [l, w] = size(rawdata);
 

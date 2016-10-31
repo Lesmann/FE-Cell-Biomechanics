@@ -2,7 +2,7 @@ function BCs = RightStretch(n, N, s, config)
 
 % Generate Right Stretch for BCE
 
-Mag = 0.1;
+Mag = config.terms.BCE_Mag;
 
 if strcmp(s, 'T')
     bcx = num2str(Mag*config.regParams.sq/2);

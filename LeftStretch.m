@@ -2,7 +2,7 @@ function BCs = LeftStretch(n, N, s, config)
 
 % Generate Left Stretch for BCE
 
-Mag = 0.1;
+Mag = 0;
 
 if strcmp(s, 'C')
     bcx = num2str(Mag*config.regParams.sq/2);

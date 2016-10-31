@@ -5,12 +5,12 @@ function BCE_BCs = GenBC4compression(nBCE, N, config)
 rBCE_BCs = RightStretch(nBCE.Right, N, 'C', config);
 rBCE_BCs = strcat(rBCE_BCs, '\n');
 lBCE_BCs = LeftStretch(nBCE.Left, N, 'C', config);
-BCs = strcat(rBCE_BCs, lBCE_BCs);
+BCE_BCs = strcat(rBCE_BCs, lBCE_BCs);
 
 % Write BCs to txt file
 fn = 'E:\Ran\Cell-ECM_model_2D_1_cell\csvFiles\BCE_BCs.txt';
 fid = fopen(fn, 'wt');
-fprintf(fid, BCs);
+fprintf(fid, BCE_BCs);
 
 end
 

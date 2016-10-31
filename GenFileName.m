@@ -1,4 +1,4 @@
-function newfile = GenFileName ( ror, LOC, withCells, numofCells, modeltype, material_linearity )
+function newfile = GenFileName ( ror, LOC, withCells, numofCells, cellDistance, modeltype, material_linearity, BCE_Mag )
 
 % This function gets the main model parameters (connectivity, randomness and NBN - see comments in the main script)
 % to generate the characteristic file name.
@@ -12,6 +12,7 @@ if ror == 1 || ror == 0
     strR = strcat(strR, '00');
 end
 strModeltype = num2str(modeltype);
+strD = strrep(num2str(cellDistance), '.', '');
 newfile = strcat('C', strC);
 newfile = strcat(newfile, '_R');
 newfile = strcat(newfile, strR);
@@ -23,6 +24,11 @@ elseif strcmp(material_linearity, 'linear')
 end
 newfile = strcat(strLinearity,'_', newfile);
 newfile = strcat(strModeltype,'_', newfile);
+if ~strcmp(modeltype, 'BCE')
+    newfile = strcat('D',strD,'_', newfile);
+else
+    newfile = strcat('M',BCE_Mag,'_', newfile);
+end
 if strcmp(withCells, 'yes')
     if isempty(numofCells)
         strnumofCells = '1cell';
