@@ -5,7 +5,7 @@ function circNodes = const2circular(pts, config)
 % circle to which the cell nodes (i.e. inner nodes) will be moved.
 
 r = config.params.r;
-th = 0:2*pi/1000:2*pi;
+th = 0:2*pi/100000:2*pi;
 
 for i = 1 : length(pts)
     

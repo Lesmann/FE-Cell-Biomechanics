@@ -3,7 +3,7 @@ function El = GenEl2d_v2 ( Nodes, config, d )
 % This function generates an element vector 'El'
 % according to desired distance 'd' between nodes in vector 'Nodes' (which is 1 or sqrt(2)).
 
-d = config.params.iSeed*d;
+d = config.regParams.iSeed*d;
 k = 1;
 % N = Nodes(:, 2:3);
 l = length(Nodes);

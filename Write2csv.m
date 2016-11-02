@@ -6,7 +6,7 @@ fn = strcat(path, fileName);
 dlmwrite(fn, elements, 'precision', '%1.0f');
 fileName = 'nodes.csv';
 fn = strcat(path, fileName);
-csvwrite(fn, nodes);
+dlmwrite(fn, nodes, 'precision', '%1.0f');
 
 end
 

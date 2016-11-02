@@ -18,10 +18,10 @@ for i = 1 : lpts % for each cell
         x = N(j, 1); % extract coordinates of the current node
         y = N(j, 2);
         d = sqrt((x-pt(1))^2+(y-pt(2))^2); % calculate the distance between the current node and the centre of the current cell
-        if d < 1.3*config.params.r % if the node is contained withing the inner circle
+        if d < 1*config.params.r % if the node is contained withing the inner circle
             rNodes(k) = j; % save serial number of that node
             k = k + 1;
-        else if (config.params.R - d) <= config.params.iSeed % if the node is outside the bigger circle
+        else if (config.params.R - d) <= config.regParams.iSeed % if the node is outside the bigger circle
                 RNodes(c) = j; % save serial number of that node
                 c = c + 1;
             end

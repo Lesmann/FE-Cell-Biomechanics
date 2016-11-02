@@ -1,4 +1,4 @@
-function [ ECMCirc ] = ECMcirc ( Elements, Nodes, R )
+function [ ECMCirc ] = ECMcirc ( Elements, Nodes, config )
 
 % This function finds and returns a vector containing the serial numbers of the nodes forming the cell boundaries
 
@@ -6,7 +6,8 @@ k = 1;
 El = Elements(:, 2:3); % a list of all elements as defined by their nodes
 N = Nodes(:, 2:3); % a list of node coordinates
 ECMCirc = 0;
-iSeed = 0.005;
+iSeed = config.regParams.iSeed;
+R = config.params.R;
 
 for i = 1 : length(N) % going through all nodes
     

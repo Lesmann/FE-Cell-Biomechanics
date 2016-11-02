@@ -10,7 +10,7 @@ N = Nodes(:, 2:3); % a list of node coordinates
 inCirc = [];
 r = config.params.r;
 cellCoordinates = config.cells;
-iSeed = config.params.iSeed;
+iSeed = config.regParams.iSeed;
 
 for j = 1 : length(cellCoordinates) % going through all cells
     for i = 1 : length(N) % going through all nodes
@@ -23,7 +23,7 @@ for j = 1 : length(cellCoordinates) % going through all cells
         xC = currC(1); yC = currC(2);
         d = sqrt((x-xC)^2 + (y-yC)^2); % distance between the current node and the centre of the current cell
         if (n >= 5 && n < 7) && d < r+3*iSeed % if the current node is connected to 5 or 6 elements, and it is quite near the cell centre
-            inCirc(k,:) = [j, i]; % this node is on the cell's edge (column 2), and its serial number is noted together with the cell's serial number (column 2)
+            inCirc(k, :) = [j, i]; % this node is on the cell's edge (column 2), and its serial number is noted together with the cell's serial number (column 2)
             k = k + 1;
         end
         

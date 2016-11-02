@@ -25,7 +25,7 @@ if isempty(strfind(config.modelType, 'BCE'))
         x2 = node2(1); y2 = node2(2); r2 = sqrt(x2^2 + y2^2); % Calculate distance of 2nd node from origin
         % Apply connectiveness only on elements within the range of the outer circle
         % (Otherwise the square will become amorphous)
-        if (r1 < config.params.R-2*config.params.iSeed || r2 < config.params.R-2*config.params.iSeed) % practically all elements excluding those within the outmost iSeed-thick ring
+        if (r1 < config.params.R-2*config.regParams.iSeed || r2 < config.params.R-2*config.regParams.iSeed) % practically all elements excluding those within the outmost iSeed-thick ring
             cEl(k, :) = El(i, 1); % Noting the serial number of element for which the above condition applies
             k = k + 1;
         end

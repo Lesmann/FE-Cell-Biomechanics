@@ -19,7 +19,7 @@ for i = 1 : nTotal % Go over all nodes
             curry = y - ycell;
             d(j) = sqrt(currx^2+curry^2); % distances of the current node from all cell centres
         end
-        if min(d) > config.params.r+2*config.params.iSeed && D < config.params.R-config.params.iSeed
+        if min(d) > config.params.r+2*config.regParams.iSeed && D < config.params.R-config.regParams.iSeed
             [ newx, newy ] = cirrdn(x, y, ROR); % Generate coordinates of new node inside the circle
             nodes(i, 1) = newx; % Initiate coordinates to nodes vector
             nodes(i, 2) = newy;
@@ -27,13 +27,13 @@ for i = 1 : nTotal % Go over all nodes
     else
         if isempty(strfind(config.modelType, 'BCE'))
             % The following statements do not apply to nodes adjacent to the edges of the ECM and cell
-            if D < config.params.R-config.params.iSeed && D > config.params.r+2*config.params.iSeed 
+            if D < config.params.R-config.regParams.iSeed && D > config.params.r+2*config.regParams.iSeed 
                 [ newx, newy ] = cirrdn(x, y, ROR); % Generate coordinates of new node inside the circle
                 nodes(i, 1) = newx; % Initiate coordinates to nodes vector
                 nodes(i, 2) = newy;
             end
         else
-            if abs(x) < config.params.R-3*config.params.iSeed && abs(y) < config.params.R-3*config.params.iSeed
+            if abs(x) < config.params.R-3*config.regParams.iSeed && abs(y) < config.params.R-3*config.regParams.iSeed
                 [ newx, newy ] = cirrdn(x, y, ROR); % Generate coordinates of new node inside the circle
                 nodes(i, 1) = newx; % Initiate coordinates to nodes vector
                 nodes(i, 2) = newy;

@@ -3,8 +3,9 @@ function [ config ] = GetParams ()
 % This function generates the parameters required for the model.
 % Units: length - mm, force - N, pressure - MPa
 
-regParams = struct('sq', 1); % default
-params = struct('iSeed', 0.005, 'R', regParams.sq/2, 'r', regParams.sq/(2*50), 'MOD', 0.1, 'matype', 'required'); % default, MOD = magnitude of displacement (relative to the cell radius)
+regParams = struct('sq', 500, 'iSeed', 1); % default
+
+params = struct('R', regParams.sq/2, 'r', 5*regParams.iSeed, 'MOD', 0.1, 'matype', 'required'); % default, MOD = magnitude of displacement (relative to the cell radius)
 CellInfo.Distance_between_Cells = 'None';
 
 % bi-linear (linear with buckling) material properties
@@ -59,7 +60,7 @@ switch model
     
     case 'BCE' % bulk control model
         
-        terms = struct('Cells', 'no', 'sqReg', 'yes', 'Contraction', 'U', 'bceType', 'BCE only');  
+        terms = struct('Cells', 'no', 'sqReg', 'yes', 'Contraction', 'U', 'bceType', 'BCE only', 'BCE_Mag', 'N/A');  
         pts = [];
         display('BCE type: ');
         terms.bceType = input('Tension (T) / Compression (C) / Shear (S): ', 's');
@@ -89,14 +90,14 @@ switch model
     
     case 'TFBC' % traction free boundary conditions at the matrix edges
         
-        terms = struct('Cells', 'yes', 'sqReg', 'no', 'Contraction', 'U', 'bceType', 'N/A');  
+        terms = struct('Cells', 'yes', 'sqReg', 'no', 'Contraction', 'U', 'bceType', 'N/A', 'BCE_Mag', 'N/A');  
         
         display('Radius of Randomness, ranging between 0 and 1');
         ror1 = input('from: ');
         ror2 = input('to: ');
         rorint = input('in intervals of: ');
         ror = ror1:rorint:ror2;
-        ROR = params.iSeed*ror;
+        ROR = regParams.iSeed*ror;
         
         display('Level of Connectivity, ranging between 0 (0 strong and 8 weak elements surrounding each node) and 8 (8 strong and 0 weak elements surrounding each node); intervals of 0.5');
         loc1 = input('from: ');
@@ -111,14 +112,14 @@ switch model
         
     case 'FBC' % fixed boundary conditions at the matrix edges
         
-        terms = struct('Cells', 'yes', 'sqReg', 'no', 'Contraction', 'U', 'bceType', 'N/A');  
+        terms = struct('Cells', 'yes', 'sqReg', 'no', 'Contraction', 'U', 'bceType', 'N/A', 'BCE_Mag', 'N/A');  
         
         display('Radius of Randomness, ranging between 0 and 1');
         ror1 = input('from: ');
         ror2 = input('to: ');
         rorint = input('in intervals of: ');
         ror = ror1:rorint:ror2;
-        ROR = params.iSeed*ror;
+        ROR = regParams.iSeed*ror;
         
         display('Level of Connectivity, ranging between 0 (0 strong and 8 weak elements surrounding each node) and 8 (8 strong and 0 weak elements surrounding each node); intervals of 0.5');
         loc1 = input('from: ');
@@ -133,7 +134,7 @@ switch model
         
     case 'UD' % user defined
         
-        terms = struct('Cells', 'required', 'sqReg', 'required', 'Contraction', 'required', 'bceType', 'N/A');  
+        terms = struct('Cells', 'required', 'sqReg', 'required', 'Contraction', 'required', 'bceType', 'N/A', 'BCE_Mag', 'N/A');  
         
         display('Terms:');
         terms.Cells = input('Model with cells? (yes/no) ', 's');
@@ -145,7 +146,7 @@ switch model
         ror2 = input('to: ');
         rorint = input('in intervals of: ');
         ror = ror1:rorint:ror2;
-        ROR = params.iSeed*ror;
+        ROR = regParams.iSeed*ror;
         
         display('Level of Connectivity, ranging between 0 (0 strong and 8 weak elements surrounding each node) and 8 (8 strong and 0 weak elements surrounding each node); intervals of 0.5');
         loc1 = input('from: ');

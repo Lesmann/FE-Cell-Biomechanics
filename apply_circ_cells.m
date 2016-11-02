@@ -10,14 +10,14 @@ function Nodes = apply_circ_cells(ic, circNodes, Nodes)
 Nodes = Nodes(:, 2:3);
 
 % re-organize ic
-[~, lic] = size(ic);
+
 for i = 1 : length(unique(ic(:, 1)))
-    oic(:, i) = ic(ic(:, 1)==i, end);
+    oic{i} = ic(ic(:, 1)==i, end);
 end
 
 for i = 1 : length(circNodes)
     
-    cic = oic(:, i);
+    cic = oic{i};
     
     cN = circNodes{i};
     [IDX, ~] = knnsearch(cN, Nodes);

@@ -24,10 +24,12 @@ elseif strcmp(material_linearity, 'linear')
 end
 newfile = strcat(strLinearity,'_', newfile);
 newfile = strcat(strModeltype,'_', newfile);
-if ~strcmp(modeltype, 'BCE')
+if isempty(strfind(modeltype, 'BCE'))
     newfile = strcat('D',strD,'_', newfile);
 else
-    newfile = strcat('M',BCE_Mag,'_', newfile);
+    strMag = num2str(BCE_Mag);
+    strMag = strrep(strMag, '.', '');
+    newfile = strcat('M',strMag,'_', newfile);
 end
 if strcmp(withCells, 'yes')
     if isempty(numofCells)

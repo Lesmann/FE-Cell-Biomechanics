@@ -20,8 +20,8 @@ for i = 1 : lcells
     end
     
     [~, x_idx] = min(dx); [~, y_idx] = min(dy);
-    pts(i, 1) = xn(x_idx) + 0.5*config.params.iSeed;
-    pts(i, 2) = yn(y_idx) + 0.5*config.params.iSeed;
+    pts(i, 1) = xn(x_idx) + 0.5*config.regParams.iSeed;
+    pts(i, 2) = yn(y_idx) + 0.5*config.regParams.iSeed;
     
 end
 

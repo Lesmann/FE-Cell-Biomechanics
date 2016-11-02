@@ -106,7 +106,7 @@ for i = 1 : ll
                 
         %% Delete elements in random - reduce connectivity
         display('Applying Connectivity');
-        ConnRange = [config.params.R, config.params.r+2*config.params.iSeed];
+        ConnRange = [config.params.R, config.params.r+2*config.regParams.iSeed];
         El = Connectivity(El, Nodes, ConnRange, config.LOC(i), config);
         
         if strcmp(config.terms.sqReg, 'yes') && isempty(strfind(config.modelType, 'BCE'))
@@ -116,7 +116,7 @@ for i = 1 : ll
         %% Define material properties and take care of non-linear geometry flag - under construction
         
         display('Generating Material Properties')
-        FN = GenFileName(config.ROR(j)/config.params.iSeed, config.LOC(i),...
+        FN = GenFileName(config.ROR(j)/config.regParams.iSeed, config.LOC(i),...
             config.terms.Cells, config.cells, config.Cells_Information.Distance_between_Cells,...
             config.modelType, config.blMatProp.type, config.terms.BCE_Mag);
         [ mat ] = defmat(config, FN);
@@ -126,7 +126,7 @@ for i = 1 : ll
         % Get inner-circle's nodes for Set and BC generation
         % Get one-sided elements (if there are any)
         if isempty(config.cells) && strcmp(config.terms.Cells, 'yes')% i.e., a model of a single cell
-            ic = Nicirc(El.new, Nodes, config.params.r);  % 'ic' just gives node numbers
+            ic = Nicirc(El.new, Nodes, config);  % 'ic' just gives node numbers
         else
             ic = Nicirc2(El.new, Nodes, config); % ic just gives both node numbers (column 2) and cell numbers (column 1)
         end
@@ -154,7 +154,7 @@ for i = 1 : ll
         if strcmp(config.modelType,'FBC')
             % Get outer-circle's nodes for Set and BC generation
             % Get one-sided elements (if there are any)
-            ECMc = ECMcirc(El.new, Nodes, config.params.R);  % ic just gives node numbers
+            ECMc = ECMcirc(El.new, Nodes, config);  % ic just gives node numbers
             t_handle_elements = toc/60;
             
             tic;
