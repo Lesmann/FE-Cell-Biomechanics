@@ -1,0 +1,18 @@
+function [ data ] = dd( rawdata )
+
+[l, w] = size(rawdata);
+raw = rawdata{1, 1};
+titles = strsplit(raw, '   ');
+
+for i = 1 : l
+    for j = 4 : w
+        raw = rawdata{i, j};
+        row = strsplit(raw, '   ');
+        for k = 1 : length(row)
+            data.(titles{k, }) = row{k};
+        end
+    end
+end
+
+end
+

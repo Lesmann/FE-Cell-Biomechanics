@@ -1,6 +1,4 @@
-function [ LSR ] = strain2log_stretch_ratio( path )
-
-% still debugging...
+function [ Res ] = strain2log_stretch_ratio( path )
 
 % This function returns the logaritm of the stretch ratio (LSR) where:
 % LSR = log(initial length of element)/(final length of element)
@@ -26,11 +24,11 @@ for i = 1 : length(E)
 end 
 
 [fnames, rawdata] = rd(path); % load data from all files in path
-[ ~, Ux, Uy ] = dd( rawdata ); % extract displacement data from rawdata
+[ data ] = dd( rawdata ); % extract displacement data from rawdata
 
 % calculate final element length for each data-set
-Nfx = Ni(:, 1)' + Ux;
-Nfy = Ni(:, 2)' + Uy;
+Nfx = Ni(:, 1)' + cell2mat(data.U_U1);
+Nfy = Ni(:, 2)' + cell2mat(data.U_U2);
 
 for i = 1 : length(fnames)
     
@@ -44,7 +42,11 @@ for i = 1 : length(fnames)
     end
 end     
 
-LSR = log(Lf./Li);
+Res.LSR = log(Lf./Li);
+Res.Li = Li;
+Res.Lf = Lf;
+Res.Elements = E;
+Res.Nodes = Ni;
 
 end
 

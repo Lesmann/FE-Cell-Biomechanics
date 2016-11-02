@@ -3,7 +3,7 @@ function [ config ] = GetParams ()
 % This function generates the parameters required for the model.
 % Units: length - mm, force - N, pressure - MPa
 
-regParams = struct('sq', 500, 'iSeed', 1); % default
+regParams = struct('sq', 500, 'iSeed', 5); % default
 
 params = struct('R', regParams.sq/2, 'r', 5*regParams.iSeed, 'MOD', 0.1, 'matype', 'required'); % default, MOD = magnitude of displacement (relative to the cell radius)
 CellInfo.Distance_between_Cells = 'None';
@@ -75,7 +75,7 @@ switch model
         ror2 = input('to: ');
         rorint = input('in intervals of: ');
         ror = ror1:rorint:ror2;
-        ROR = params.iSeed*ror;
+        ROR = regParams.iSeed*ror;
         
         display('Level of Connectivity, ranging between 0 (0 strong and 8 weak elements surrounding each node) and 8 (8 strong and 0 weak elements surrounding each node); intervals of 0.5');
         loc1 = input('from: ');
