@@ -64,15 +64,20 @@ for i = 1 : ll
         tic;
         
         %% Generate elements according to specified distance (between nodes)
+       
+        if isempty(strfind(config.modelType, 'BCE'))
+            % Generate basic elements
+            bEl = GenEl2d_v2(Nodes, config, 1);
+            
+            % Generate oblique elements
+            oEl = GenEl2d_v2(Nodes, config, sqrt(2));
+            
+            % Add index to element vector
+            El = vertcat(bEl, oEl);
+        else
+            El = GenEl2d_v3(Nodes);
+        end
         
-        % Generate basic elements
-        bEl = GenEl2d_v2(Nodes, config, 1);
-        
-        % Generate oblique elements
-        oEl = GenEl2d_v2(Nodes, config, sqrt(2));
-        
-        % Add index to element vector
-        El = vertcat(bEl, oEl);
         El = AddIndx(El); % the result is a vector containing three columns: element serial number and the two nodes defining it (as defined by their serial numbers)
         t_generate_elements = toc/60;
         
@@ -154,11 +159,11 @@ for i = 1 : ll
         if strcmp(config.modelType,'FBC')
             % Get outer-circle's nodes for Set and BC generation
             % Get one-sided elements (if there are any)
-            ECMc = ECMcirc(El.new, Nodes, config);  % ic just gives node numbers
+            ECMc = ECMcirc(El.new, Nodes, config);
             t_handle_elements = toc/60;
             
             tic;
-            ECMNsets = GenNSets(ECMc, 'ECMNsets.txt'); % putting the nodes above into a file
+            ECMNsets = GenNSets(ECMc, 'ECMNsets.txt'); % writing the nodes above into a file
             t_generate_nodesSets = toc/60;
         end
         
@@ -173,7 +178,7 @@ for i = 1 : ll
         end
         
         if strcmp(config.terms.Cells, 'yes')
-            if strcmp(config.terms.Contraction,'U') % if the BCs/LCs of the model are BCs
+            if strcmp(config.terms.Contraction,'U') % if the UBCs/LBCs of the model are BCs
                 display('Generating Boundary Conditions');
                 tic;
                 if isempty(config.cells) % a single cell

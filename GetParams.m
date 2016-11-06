@@ -3,10 +3,10 @@ function [ config ] = GetParams ()
 % This function generates the parameters required for the model.
 % Units: length - mm, force - N, pressure - MPa
 
-regParams = struct('sq', 500, 'iSeed', 5); % default
+regParams = struct('sq', 500, 'iSeed', 1); % default
 
 params = struct('R', regParams.sq/2, 'r', 5*regParams.iSeed, 'MOD', 0.1, 'matype', 'required'); % default, MOD = magnitude of displacement (relative to the cell radius)
-CellInfo.Distance_between_Cells = 'None';
+CellInfo.Distance_between_Cells = 'NA';
 
 % bi-linear (linear with buckling) material properties
 blmatprop = struct('ymod', 1, 'poisr', 0.45, 'type', 'bi-linear', 'n', 100, 'r', 0.5, 'rho', 0.1);

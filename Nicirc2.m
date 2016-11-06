@@ -22,7 +22,7 @@ for j = 1 : length(cellCoordinates) % going through all cells
         currC = cellCoordinates(j, :); % extracting the coordinates of the centre of the current cell
         xC = currC(1); yC = currC(2);
         d = sqrt((x-xC)^2 + (y-yC)^2); % distance between the current node and the centre of the current cell
-        if (n >= 5 && n < 7) && d < r+3*iSeed % if the current node is connected to 5 or 6 elements, and it is quite near the cell centre
+        if (n >= 5 && n < 7) && d < r+2*iSeed % if the current node is connected to 5 or 6 elements, and it is quite near the cell centre
             inCirc(k, :) = [j, i]; % this node is on the cell's edge (column 2), and its serial number is noted together with the cell's serial number (column 2)
             k = k + 1;
         end

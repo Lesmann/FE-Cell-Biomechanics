@@ -2,7 +2,7 @@ function [ data ] = dd( rawdata )
 
 [l, w] = size(rawdata);
 raw = rawdata{1, 1};
-titles = strsplit(raw, '   ');
+titles = strsplit(raw, '  ');
 titles(isempty(titles)) = [];
 titles = strtrim(titles);
 
@@ -12,7 +12,7 @@ for i = 1 : l
         row = strsplit(raw, '   ');
         row = strtrim(row);
         row(isempty(row)) = [];
-        for k = 2 : length(row)-2
+        for k = 2 : length(titles)
             fieldname = titles{k};
             fieldname = strrep(fieldname, ' ', '');
             fieldname = strrep(fieldname, '.', '_');

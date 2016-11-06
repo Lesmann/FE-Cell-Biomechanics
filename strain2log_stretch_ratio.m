@@ -38,7 +38,7 @@ for i = 1 : length(fnames)
     Nx2 = Nfx(curr_el(2)); Ny2 = Nfy(curr_el(2));
     
     Lfx = Nx2 - Nx1; Liy = Ny2 - Ny1;
-    Lf(i) = sqrt(Lfx^2+Liy^2);
+    Lf(j) = sqrt(Lfx^2+Liy^2);
     end
 end     
 
