@@ -135,6 +135,7 @@ for i = 1 : ll
         else
             ic = Nicirc2(El.new, Nodes, config); % ic just gives both node numbers (column 2) and cell numbers (column 1)
         end
+        config.Cells_Information.cell_nodes = ic;
         
         if strcmp(config.terms.Cells, 'yes')
             Nodes = apply_circ_cells(ic, circNodes, Nodes); % Make cell symmetric-circular

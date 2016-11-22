@@ -24,13 +24,16 @@ for i = 1 : length(E)
 end 
 
 [fnames, rawdata] = rd(path); % load data from all files in path
-[ data ] = dd( rawdata ); % extract displacement data from rawdata
 
-% calculate final element length for each data-set
-Nfx = Ni(:, 1)' + cell2mat(data.U_U1);
-Nfy = Ni(:, 2)' + cell2mat(data.U_U2);
 
 for i = 1 : length(fnames)
+    
+    data(i) = dd( rawdata(i, :) ); % extract displacement data from rawdata
+    
+    % calculate final element length for each data-set
+Nfx = Ni(:, 1)' + cell2mat(data(i).U_U1);
+Nfy = Ni(:, 2)' + cell2mat(data(i).U_U2);
+
     
     for j = 1 : length(E)
     curr_el = E(j, :);

@@ -2,11 +2,11 @@ clc
 clear all
 close all
 
-cd('E:\Ran\Cell-ECM_model_2D_1_cell\QA_models\distanceadjustment-connectivity8');
+cd('E:\Ran\Cell-ECM_model_2D_1_cell\QA_models\Old geometry\distanceadjustment-connectivity8');
 filenames=dir('*.inp');
 filenames={filenames.name};
 
-for l=1:length(filenames)
+for l=1 %:length(filenames)
     filename=filenames{l};
     filename=filename(1:end-4)
     %%% Loading data

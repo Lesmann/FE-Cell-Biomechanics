@@ -16,7 +16,7 @@ for i = 1 : length(N) % going through all nodes
     x = currN(1); y = currN(2);
     d = sqrt(x^2 + y^2); % distance of the current node from the origin
     
-    if (n >= 5 && n < 7) && d < config.params.r+3*iSeed % if the current node is connected to 5 or 6 elements, and it is quite near the origin  
+    if (n >= 4 && n < 7) && d < config.params.r+2*iSeed % if the current node is connected to 4, 5 or 6 elements, and it is quite near the origin  
         inCirc(k) = i; % this node is on the cell's edge, and its serial number is noted
         k = k + 1;
     end

@@ -22,7 +22,11 @@ for i = 1 : l
             fieldname = strrep(fieldname, '\n', '');
             fieldname = strrep(fieldname, '\b', '');
             fieldname = strrep(fieldname, '\r', '');
-            data.(fieldname){j-3} = str2double(row{k});
+            try
+                data.(fieldname){j-3} = str2double(row{k});
+            catch exc
+                error = exc.message;
+            end
         end
     end
 end

@@ -1,16 +1,17 @@
 % MCCA = Multiple Cell Configuration Analysis
 
-
 close all
 clear all
 clc
 f=1;
+
 % This script runs the code to analyse Multiple Cell Configuration Models
 
-% path = 'E:\Ran\Cell-ECM_model_2D_1_cell\QA_models\Hanan\Hanan_QA\';
-path = 'E:\Ran\Cell-ECM_model_2D_1_cell\Data\QA\';
+path = 'E:\Ran\Cell-ECM_model_2D_1_cell\DataBase\BCE\';
 
 % Res = Analyse_v2( path );
+
+%% BCE Analysis
 
 Res = BCE_Analysis(path);
 fn = strrep(Res.FileName, '_', '-');
@@ -18,9 +19,51 @@ fn = strrep(Res.FileName, '_', '-');
 figure(f); f=f+1;
 hold on
 for i = 1 : length(Res.Ugrad)
-    plot(Res.Ugrad(i).avg_row, Res.Ugrad(i).EPR);
+    x = Res.Ref_Data.Nodes(:, 1); % node x coordinates matrix
+    y = Res.Ref_Data.Nodes(:, 2); % node y coordinates matrix
+    
+    % Find indices of single center-line nodes 
+    scl = y<(Res.Config.regParams.iSeed) & y>-(Res.Config.regParams.iSeed); 
+    
+    ux = Res.Data.U_U1; % x displacement matrix
+    ux = cell2mat(ux);
+    uy = Res.Data.U_U2; % y displacement matrix
+    uy = cell2mat(uy);
+    
+    yy = y(scl); % y coordinates of nodes on single line at center of network
+    xx = x(scl); % x coordinates of nodes on single line at center of network
+    
+    uxx = ux(scl)'; % x displacement values of single line at center of network
+    uyy = uy(scl)'; % y displacement values of single line at center of network
+    
+    Pxx(i, :) = polyfit(xx, uxx, 1); % Linear-fit on displacement x vs position x
+    Pyy(i, :) = polyfit(yy, uyy, 1); % Linear-fit on displacement y vs position y
+    
+    Prho(i) = (Pxx(i, 1)+Pyy(i, 1))/2; % Average normal strain
+    
+    Pyx(i, :) = polyfit(xx, uyy, 1); % Linear-fit on displacement y vs position x
+    Pxy(i, :) = polyfit(yy, uxx, 1); % Linear-fit on displacement x vs position y
+    
+    Ptau(i) = (Pyx(i, 1) + Pxy(i, 1))/2; % Average shear strain
+    
+    Normal(:, i) = Prho(i)*xx; % Linear-fit line of average normal strain
+    Shear(:, i) = Ptau(i)*xx; % Linear-fit line of average shear strain
+    
+    plot(Shear(:, i), Normal(:, i));
 end
 legend(fn)
-xlabel('Axial strain'), ylabel('Effective poisson`s Ratio')
-title('Effective Poisson`s Ratio vs. Axial Strain')
+xlabel('Shear Strain'), ylabel('Normal Strain')
+% title('Effective Poisson`s Ratio vs. Axial Strain')
+axis tight
 hold off
+
+%% Path Analysis
+
+% path2config = 'E:\Ran\Cell-ECM_model_2D_1_cell\csvFiles\Config.mat';
+% config = load(path2config);
+% config = config.config;
+% d = config.Cells_Information.Distance_between_Cells*config.params.R;
+% geo_range = d/2;
+% val_range = 0.1;
+
+% GDP = pathfinder( path, geo_range, val_range );
