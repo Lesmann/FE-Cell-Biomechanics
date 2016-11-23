@@ -2,9 +2,9 @@ function BCE_BCs = GenBC4Shear(nBCE, N, config)
 
 % This function generates BCs required for a Shear-BCE
 
-rBCE_BCs = RightStretch(nBCE.Right, N, 'S', config);
+rBCE_BCs = RightStretch(nBCE.Top, N, 'S', config);
 rBCE_BCs = strcat(rBCE_BCs, '\n');
-lBCE_BCs = LeftStretch(nBCE.Left, N, 'S', config);
+lBCE_BCs = LeftStretch(nBCE.Buttom, N, 'S', config);
 BCE_BCs = strcat(rBCE_BCs, lBCE_BCs);
 
 % Write BCs to txt file

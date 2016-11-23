@@ -4,9 +4,8 @@ function [ config ] = GetParams ()
 % Units: length - mm, force - N, pressure - MPa
 
 regParams.iSeed = 0.01; % default
-regParams.rect.length = 1;
-regParams.rect.width = 1;
-
+regParams.rect.length = 1; % default
+regParams.rect.width = 1; % default
 
 params = struct('R', regParams.rect.length/2, 'r', 5*regParams.iSeed, 'MOD', 0.1, 'matype', 'required'); % default, MOD = magnitude of displacement (relative to the cell radius)
 CellInfo.Distance_between_Cells = 'NA';
@@ -69,7 +68,7 @@ switch model
         display('BCE type: ');
         terms.bceType = input('Tension (T) / Compression (C) / Shear (S): ', 's');
         if strcmp(terms.bceType, 'S')
-            regParams.rect.width = 0.1*regParams.rect.length;
+            regParams.rect.length = 0.1*regParams.rect.width;
         end
         model = strcat(model, '_');
         model = strcat(model, terms.bceType);
