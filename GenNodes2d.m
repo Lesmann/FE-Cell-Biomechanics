@@ -5,8 +5,8 @@ function [ newNodes ] = GenNodes2d ( config )
 % The list titled 'newNodes' contains two colums representing the (x,y) coordinates
 
 k = 1;
-for i = config.regParams.sq/2 : -config.regParams.iSeed : -config.regParams.sq/2 % Generate 1st dimension nodes
-    for j = -config.regParams.sq/2 : config.regParams.iSeed : config.regParams.sq/2 % Generate 2nd dimension nodes
+for i = config.regParams.rect.length/2 : -config.regParams.iSeed : -config.regParams.rect.length/2 % Generate 1st dimension nodes
+    for j = -config.regParams.rect.width/2 : config.regParams.iSeed : config.regParams.rect.width/2 % Generate 2nd dimension nodes
         
         newNodes(k, :) = [j, i];
         k = k + 1;

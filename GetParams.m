@@ -3,9 +3,12 @@ function [ config ] = GetParams ()
 % This function generates the parameters required for the model.
 % Units: length - mm, force - N, pressure - MPa
 
-regParams = struct('sq', 1, 'iSeed', 0.01); % default
+regParams.iSeed = 0.01; % default
+regParams.rect.length = 1;
+regParams.rect.width = 1;
 
-params = struct('R', regParams.sq/2, 'r', 5*regParams.iSeed, 'MOD', 0.1, 'matype', 'required'); % default, MOD = magnitude of displacement (relative to the cell radius)
+
+params = struct('R', regParams.rect.length/2, 'r', 5*regParams.iSeed, 'MOD', 0.1, 'matype', 'required'); % default, MOD = magnitude of displacement (relative to the cell radius)
 CellInfo.Distance_between_Cells = 'NA';
 
 % bi-linear (linear with buckling) material properties
@@ -65,6 +68,9 @@ switch model
         pts = [];
         display('BCE type: ');
         terms.bceType = input('Tension (T) / Compression (C) / Shear (S): ', 's');
+        if strcmp(terms.bceType, 'S')
+            regParams.rect.width = 0.1*regParams.rect.length;
+        end
         model = strcat(model, '_');
         model = strcat(model, terms.bceType);
         

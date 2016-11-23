@@ -1,6 +1,6 @@
 function [ cellCoordinates ] = MCC_4neighbours ( regParams, params )
 
-[cellCoordinates_x,cellCoordinates_y] = meshgrid(-regParams.sq/2+params.R/4: params.R/4 : regParams.sq/2-params.R/4);
+[cellCoordinates_x,cellCoordinates_y] = meshgrid(-regParams.rect.length/2+params.R/4: params.R/4 : regParams.rect.length/2-params.R/4);
 k=1;
 for i=1:size(cellCoordinates_x,1)
     for j=1:size(cellCoordinates_y,2)

@@ -6,6 +6,7 @@ clc
 f=1;
 
 % This script runs the code to analyse Multiple Cell Configuration Models
+% According to Jacob's instructions
 
 path = 'E:\Ran\Cell-ECM_model_2D_1_cell\DataBase\BCE\Data\ShearLoading\';
 
@@ -23,7 +24,7 @@ for i = 1 : length(Res.Ugrad)
     y = Res.Ref_Data(i).Nodes(:, 2); % node y coordinates matrix
     
     % Find indices of single center-line nodes 
-    scl = y<(Res.Config.regParams.iSeed) & y>(-Res.Config.regParams.iSeed); 
+    scl = y<(Res.config.regParams.iSeed) & y>(-Res.config.regParams.iSeed); 
     
     ux = Res.Data(i).U_U1; % x displacement matrix
     ux = cell2mat(ux);

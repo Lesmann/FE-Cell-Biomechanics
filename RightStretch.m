@@ -5,13 +5,13 @@ function BCs = RightStretch(n, N, s, config)
 Mag = config.terms.BCE_Mag;
 
 if strcmp(s, 'T')
-    bcx = num2str(Mag*config.regParams.sq/2);
+    bcx = num2str(Mag*config.regParams.rect.length/2);
     bcy = num2str(0);
 elseif strcmp(s, 'C')
-    bcx = num2str(-Mag*config.regParams.sq/2);
+    bcx = num2str(-Mag*config.regParams.rect.length/2);
     bcy = num2str(0);
 elseif strcmp(s, 'S')
-    bcy = num2str(-Mag*config.regParams.sq/2);
+    bcy = num2str(-Mag*config.regParams.rect.length/2);
     bcx = num2str(0);
 end
 

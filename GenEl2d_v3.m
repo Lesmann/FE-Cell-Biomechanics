@@ -1,16 +1,21 @@
-function el = GenEl2d_v3( nodes )
+function el = GenEl2d_v3( nodes, config )
 
 % this function is dedicated to Yossi Tokash, the greatest brother at all
 % times... (see dedicated comments)
 
-% this function is an optimized (time and memory consumption) version of 'GenEl2d_v2' function
+% this function is an optimized (time and memory consumption) version of the 'GenEl2d_v2' function
 % this function generates elements for box-x configuration models.
 % this function operates by cunstructing numerical sub-arrays of the node array
 % and pairing them with respect to their position within the matrix.
 
 numat = 1 : length(nodes);
-n = sqrt(length(nodes));
-numat = reshape(numat, n, n);
+% n = sqrt(length(nodes));
+l = config.regParams.rect.length;
+w = config.regParams.rect.width;
+seed = config.regParams.iSeed;
+nl = l/seed+1;
+nw = w/seed+1;
+numat = reshape(numat, nw, nl);
 numat = numat';
 
 % Constructing siege equipment

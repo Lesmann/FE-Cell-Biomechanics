@@ -75,7 +75,7 @@ for i = 1 : ll
             % Add index to element vector
             El = vertcat(bEl, oEl);
         else
-            El = GenEl2d_v3(Nodes);
+            El = GenEl2d_v3(Nodes, config);
         end
         
         El = AddIndx(El); % the result is a vector containing three columns: element serial number and the two nodes defining it (as defined by their serial numbers)
