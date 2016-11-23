@@ -46,10 +46,10 @@ for i = 1 : length(Res.Ugrad)
     
     Ptau(i) = (Pyx(i, 1) + Pxy(i, 1))/2; % Average shear strain
     
-    Normal(:, i) = Prho(i)*xx; % Linear-fit line of average normal strain
-    Shear(:, i) = Ptau(i)*xx; % Linear-fit line of average shear strain
+    rho(:, i) = Prho(i)*xx; % Linear-fit line of average normal strain
+    tau(:, i) = Ptau(i)*xx; % Linear-fit line of average shear strain
     
-    plot(Shear(:, i), Normal(:, i));
+    plot(tau(:, i), rho(:, i));
 end
 legend(fn)
 xlabel('Shear Strain'), ylabel('Normal Strain')
