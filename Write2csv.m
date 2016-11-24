@@ -15,8 +15,8 @@ bufn = strcat(backup_path, bu_fileName);
 fid = fopen(fn, 'wt');
 bufid = fopen(bufn, 'wt');
 for i = 1 : length(nodes)
-    fprintf(fid, '%1.0f, %1.5f, %1.5f\n', nodes(i, :));
-    fprintf(bufid, '%1.0f, %1.5f, %1.5f\n', nodes(i, :));
+    fprintf(fid, '%1.0f, %1.8f, %1.8f\n', nodes(i, :));
+    fprintf(bufid, '%1.0f, %1.8f, %1.8f\n', nodes(i, :));
 end
 % csvwrite(fn, nodes);
 
