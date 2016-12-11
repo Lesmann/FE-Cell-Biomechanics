@@ -7,11 +7,44 @@ f=1;
 
 % This script runs the Multiple Cell Configuration analysis algorithm
 
-path = 'E:\Ran\Cell-ECM_model_2D_1_cell\DataBase\BCE\Data\ShearLoading\';
-
 % Res = Analyse_v2( path );
 
 %% BCE Analysis
+
+% Analysis of Shear Loading Simulations
+
+% path = 'E:\Ran\Cell-ECM_model_2D_1_cell\DataBase\BCE\Data\ShearLoading_RuntimeDir\';
+% 
+% Res = BCE_Analysis(path);
+% fn = strrep(Res.FileName, '_', '-');
+% 
+% figure(f); f=f+1;
+% hold on
+% for i = 1 : length(Res.Ugrad)
+%     E_Notbohm(i) = Notbohm_AvgStrain( Res.Ref_Data(i), Res.Data(i) );
+%     plot(E_Notbohm(i).tau, E_Notbohm(i).rho);
+% end
+% legend(fn)
+% xlabel('Shear Strain'), ylabel('Normal Strain')
+% axis tight
+% hold off
+% 
+% 
+% figure(f); f=f+1;
+% hold on
+% for i = 1 : length(Res.Ugrad)
+%     E_TnS(i) = TnS_AvgStrain(Res.Ref_Data(i), Res.Data(i));
+%     plot(E_TnS(i).TnS.epsilon, E_TnS(i).TnS.linear_fit);
+%     % plot(E_TnS(i).Notbohm.epsilon, E_TnS(i).Notbohm.gama);
+% end
+% legend(fn)
+% xlabel('Shear Strain'), ylabel('Normal Strain')
+% axis tight
+% hold off
+
+% Analysis of Uniaxial Tension Simulations
+
+path = 'E:\Ran\Cell-ECM_model_2D_1_cell\DataBase\BCE\Data\Tension_RuntimeDir\';
 
 Res = BCE_Analysis(path);
 fn = strrep(Res.FileName, '_', '-');
@@ -19,14 +52,13 @@ fn = strrep(Res.FileName, '_', '-');
 figure(f); f=f+1;
 hold on
 for i = 1 : length(Res.Ugrad)
-    E_Notbohm(i) = Notbohm_AvgStrain( Res.Ref_Data(i), Res.Data(i) );
-    E_TnS(i) = TnS_AvgStrain(Res.Ref_Data(i), Res.Data(i));
-    plot(E_Notbohm(i).tau, E_Notbohm(i).rho);
-    plot(E_TnS(i).tau, E_TnS(i).rho);
+    E_Notbohm(i) = Notbohm_AvgStrain(Res.Ref_Data(i), Res.Data(i));
+    plot(E_Notbohm(i).xx, E_Notbohm(i).Pois);
+    % plot(E_TnS(i).Notbohm.epsilon, E_TnS(i).Notbohm.gama.);
 end
 legend(fn)
-xlabel('Shear Strain'), ylabel('Normal Strain')
-% title('Effective Poisson`s Ratio vs. Axial Strain')
+xlabel('Effective Poisson`s Ratio'), ylabel('Axial Strain')
+title('Effective Poisson`s Ratio vs. Axial Strain')
 axis tight
 hold off
 

@@ -29,6 +29,8 @@ x = Ref_Data.Nodes(:, 1); % node x coordinates matrix
     
     % Prho(i) = (Pxx(i, 1)+Pyy(i, 1))/2; % Average normal strain
     Prho = Pxx;
+    strain.trans = Pyy(1)*yy;
+    strain.axial = Prho(1)*xx;
     
     Pxy = polyfit(xx, uyy, 1); % Linear-fit of displacement y vs position x
     Pyx = polyfit(yy, uxx, 1); % Linear-fit of displacement x vs position y
@@ -36,7 +38,10 @@ x = Ref_Data.Nodes(:, 1); % node x coordinates matrix
     Ptau = (Pyx + Pxy)/2; % Average shear strain
     
     strain.rho = Prho(1)*xx; % Linear-fit line of average normal strain
-    strain.tau = Ptau(2)*xx; % Linear-fit line of average shear strain
-
+    strain.tau = Ptau(1)*xx; % Linear-fit line of average shear strain
+    
+    strain.Pois = strain.axial./strain.trans;
+    strain.xx = xx;
+    
 end
 

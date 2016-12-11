@@ -1,4 +1,4 @@
-function [ strain ] = Notbohm_AvgStrain( Ref_Data, Data )
+function strain = Notbohm_AvgStrain( Ref_Data, Data )
 
 % Algorithm for:
 % Average shear and normal strain computation according to Jacob Notbohm's instructions
@@ -29,6 +29,7 @@ x = Ref_Data.Nodes(:, 1); % node x coordinates matrix
     
     % Prho(i) = (Pxx(i, 1)+Pyy(i, 1))/2; % Average normal strain
     Prho = Pxx;
+    st
     
     Pxy = polyfit(xx, uyy, 1); % Linear-fit of displacement y vs position x
     Pyx = polyfit(yy, uxx, 1); % Linear-fit of displacement x vs position y
@@ -36,7 +37,9 @@ x = Ref_Data.Nodes(:, 1); % node x coordinates matrix
     Ptau = (Pyx + Pxy)/2; % Average shear strain
     
     strain.rho = Prho(1)*xx; % Linear-fit line of average normal strain
-    strain.tau = Ptau*xx; % Linear-fit line of average shear strain
-
+    strain.tau = Ptau(1)*xx; % Linear-fit line of average shear strain
+    
+    strain.Pois = strain.rho./strain.tau;
+    
 end
 
