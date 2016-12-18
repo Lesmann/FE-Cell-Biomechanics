@@ -1,4 +1,4 @@
-% MCCA = Multiple Cell Configuration Analysis
+% MCCA = Multiple Cell Configuration Analysis script
 
 close all
 clear all
@@ -26,9 +26,9 @@ f=1;
 % end
 % legend(fn)
 % xlabel('Shear Strain'), ylabel('Normal Strain')
+% title('Normal vs. Shear Strain in Shear Loading Simulation - Notbohm')
 % axis tight
 % hold off
-% 
 % 
 % figure(f); f=f+1;
 % hold on
@@ -39,6 +39,7 @@ f=1;
 % end
 % legend(fn)
 % xlabel('Shear Strain'), ylabel('Normal Strain')
+% title('Normal vs. Shear Strain in Shear Loading Simulation - Us')
 % axis tight
 % hold off
 
@@ -49,16 +50,31 @@ path = 'E:\Ran\Cell-ECM_model_2D_1_cell\DataBase\BCE\Data\Tension_RuntimeDir\';
 Res = BCE_Analysis(path);
 fn = strrep(Res.FileName, '_', '-');
 
+% figure(f); f=f+1;
+% hold on
+% for i = 1 : length(Res.Ugrad)
+%     E_TnS(i) = TnS_AvgStrain(Res.Ref_Data(i), Res.Data(i));
+%     plot(E_TnS(i).TnS.UAT.linfitx, E_TnS(i).TnS.UAT.linfity);
+%     % plot(E_TnS(i).Notbohm.epsilon, E_TnS(i).Notbohm.gama);
+%     % E_Notbohm(i) = Notbohm_AvgStrain(Res.Ref_Data(i), Res.Data(i));
+%     % plot(E_Notbohm(i).xx, E_Notbohm(i).Pois);
+%     % plot(E_TnS(i).Notbohm.epsilon, E_TnS(i).Notbohm.gama.);
+% end
+% legend(fn)
+% ylabel('Effective Poisson`s Ratio'), xlabel('Axial Strain')
+% title('Effective Poisson`s Ratio vs. Axial Strain in Uniaxial Tension Simulation')
+% axis tight
+% hold off
+
 figure(f); f=f+1;
 hold on
 for i = 1 : length(Res.Ugrad)
-    E_Notbohm(i) = Notbohm_AvgStrain(Res.Ref_Data(i), Res.Data(i));
-    plot(E_Notbohm(i).xx, E_Notbohm(i).Pois);
-    % plot(E_TnS(i).Notbohm.epsilon, E_TnS(i).Notbohm.gama.);
+    E_TnS(i) = TnS_AvgStrain( Res.Ref_Data(i), Res.Data(i) );
+    plot(E_TnS(i).axial, E_TnS(i).pois);
 end
 legend(fn)
-xlabel('Effective Poisson`s Ratio'), ylabel('Axial Strain')
-title('Effective Poisson`s Ratio vs. Axial Strain')
+ylabel('Effective Poisson`s Ratio'), xlabel('Axial Strain')
+title('Effective Poisson`s Ratio vs. Axial Strain in Uniaxial Tension Simulation')
 axis tight
 hold off
 

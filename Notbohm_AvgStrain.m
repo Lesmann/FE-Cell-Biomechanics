@@ -42,6 +42,8 @@ x = Ref_Data.Nodes(:, 1); % node x coordinates matrix
     
     strain.Pois = strain.axial./strain.trans;
     strain.xx = xx;
+    strain.PEPR = polyfit(strain.Pois, strain.xx, 1);
+    strain.EPR = strain.PEPR(1)*strain.xx;
     
 end
 

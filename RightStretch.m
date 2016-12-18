@@ -29,12 +29,12 @@ for i = 1 : l % going through all nodes on the cell's edge in order to assign th
         BCs = strcat(BCs, ', 1, 1, ');        
         BCs = strcat(BCs, bcx); % x BC
         BCs = strcat(BCs, ' \n');
-        BCs = strcat(BCs, 'ns');
-        BCs = strcat(BCs, num2str(n(i)));
-        BCs = strcat(BCs, ', 2, 2, ');
-        BCs = strcat(BCs, bcy); % y BC
-        BCs = strcat(BCs, ' \n');
-        bcNames = strcat(bcNames, ', ');
+        % BCs = strcat(BCs, 'ns');
+        % BCs = strcat(BCs, num2str(n(i)));
+        % BCs = strcat(BCs, ', 2, 2, ');
+        % BCs = strcat(BCs, bcy); % y BC
+        % BCs = strcat(BCs, ' \n');
+        % bcNames = strcat(bcNames, ', ');
     else
         bcNames = strcat(bcNames, 'ns');
         bcNames = strcat(bcNames, num2str(n(i)));
@@ -45,12 +45,12 @@ for i = 1 : l % going through all nodes on the cell's edge in order to assign th
         temp = strcat(temp, ', 1, 1, ');
         temp = strcat(temp, bcx); % x BC
         temp = strcat(temp, ' \n');
-        temp = strcat(temp, 'ns');
-        temp = strcat(temp, num2str(n(i)));
-        temp = strcat(temp, ', 2, 2, ');
-        temp = strcat(temp, bcy); % y BC
-        temp = strcat(temp, ' \n');
-        bcNames = strcat(bcNames, ', ');
+        % temp = strcat(temp, 'ns');
+        % temp = strcat(temp, num2str(n(i)));
+        % temp = strcat(temp, ', 2, 2, ');
+        % temp = strcat(temp, bcy); % y BC
+        % temp = strcat(temp, ' \n');
+        % bcNames = strcat(bcNames, ', ');
         BCs = strcat(BCs, temp);
     end
 end

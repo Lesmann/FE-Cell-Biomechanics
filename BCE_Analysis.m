@@ -1,6 +1,6 @@
 function [ Res ] = BCE_Analysis( path )
 
-% This function Analyses bulk-control experiments (BCE) models data and
+% This function Analyses bulk-control experiment (BCE) models data and
 % generates the following graphs according to the BCE Type:
 % 1. Poisson's ratio vs. axial strain for uniaxial tension/compression BCEs.
 % 2. Normal vs. shear strain for shear loading BCEs.
