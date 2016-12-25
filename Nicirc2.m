@@ -16,13 +16,13 @@ for j = 1 : length(cellCoordinates) % going through all cells
     for i = 1 : length(N) % going through all nodes
         
         e = El==i; % creating a matrix in which i is 1 and the rest is all 0-s
-        n = sum(sum(e)); % counting how many times a certain node appears in the elements list, i.e. to how many elements it is connected
+        n = sum(sum(e)); % counting how many times a certain node appears in the elements list, i.e. node's connectivity
         currN = N(i, :); % extracting the coordinates of the current node
         x = currN(1); y = currN(2);
         currC = cellCoordinates(j, :); % extracting the coordinates of the centre of the current cell
         xC = currC(1); yC = currC(2);
         d = sqrt((x-xC)^2 + (y-yC)^2); % distance between the current node and the centre of the current cell
-        if (n >= 4 && n < 7) && d < r+2*iSeed % if the current node is connected to 4, 5 or 6 elements, and it is quite near the cell centre
+        if (n >= 4 && n < 7) && d < r+2*iSeed % if the current node's connectivity is 4, 5 or 6 , and it is quite near the cell centre
             inCirc(k, :) = [j, i]; % this node is on the cell's edge (column 2), and its serial number is noted together with the cell's serial number (column 2)
             k = k + 1;
         end

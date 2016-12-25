@@ -1,31 +1,44 @@
-function [ newNodes ] = Remodel( field, frame )
+function [ frame newNodes ] = Remodel( field, frame, config )
 
 % This function gets the previous model and its results and remodels
 % it according to a chosen field-output (FO) (e.g. displacement, stress, reaction force or strain fields).
+% This function creates a new inp file along with all relevant data and
+% configuration information.
 
-% A. Read Fields from last frame.
-    
 % 1. Assemble path according to frame number
-frame_str = double2str(frame);
 
-gpath = 'E:\Ran\Cell-ECM_model_2D_1_cell\DataBase\DCR\';
-file = strcat('data', frame_str);
-fpath = strcat(gpath, file);
+%% A. Read data from last frame
 
-[~, Fields] = rd(fpath);
+frame = frame + 1; % promote frame
+iSeed = config.regParams.iSeed;
+frame_str = num2str(frame);
+
+gpath = 'E:\Ran\Cell-ECM_model_2D_1_cell\DataBase\DCR\DCR_Field_Outputs\';
+currfile = strrep(config.fn, '.inp', '.csv');
+fpath = strcat(gpath, currfile);
+
+% read fields from Abaqus csv file
+Fields = read_fields(fpath); 
 FV = Fields.(field);
 
-% A. Read last configuration.
-config = load(cpath);
-iSeed = config.regparams.iSeed;
+% Read last nodes and elements.
+last_nodes_file = ['nodes#', curr_file, '.csv'];
+last_elements_file = ['elements#', curr_file, '.csv'];
 
-% B. Read last nodes and elements.
+npath = 'E:\Ran\Cell-ECM_model_2D_1_cell\DataBase\DCR\DCR_nodes\';
+epath = 'E:\Ran\Cell-ECM_model_2D_1_cell\DataBase\DCR\DCR_elements\';
+
+npath = [npath, last_nodes_file];
+epath = [epath, last_elements_file];
+
 nodes = csvread(npath);
 elements = csvread(epath);
+
 lnodes = length(nodes);
 
+%% C. Compute remodel coordinates
 
-% D. For each node:
+% For each node:
 
 for i = 1 : lnodes
     
@@ -37,7 +50,7 @@ for i = 1 : lnodes
     % 2. Draw field-value (FV) in x and y for node.
     vparent = FV(i);
     
-    % 3. Draw field-value (FV) in x and y for neighbores.
+    % 3. Draw field-value (FV) in x and y for children.
     vchildren = FV(nchildren);
     
     % 4. Calculate gradient slope in x and y (Sx and Sy) for parent-value (parent) and
@@ -55,16 +68,44 @@ for i = 1 : lnodes
     % 7. Move node in x and y
     newNodesx(i) = iNodex+Movex;
     newNodesy(i) = iNodey+Movey;
-
+    
 end
 
 newNodes = vertcat(newNodesx, newNodesy);
 
-% E. Write nodes#.csv specifying frame number.
-csvPath = 'E:\Ran\Cell-ECM_model_2D_1_cell\csvFiles\DCR\';
-csvfile = strcat('nodes', frame_str);
-csvPath = strcat(csvPath, csvfile);
-csvwrite(csvPath, newNodes);
+%% D. Store new data in DCR data-base
+
+% Write nodes#.csv specifying frame number.
+csvfile = ['nodes#', frame_str, '.csv'];
+csvPath = 'E:\Ran\Cell-ECM_model_2D_1_cell\csvFiles\DCR\DCR_nodes\';
+csvPath = [csvPath, csvfile];
+
+fid = fopen(csvPath, 'wt');
+for i = 1 : length(nodes)
+    fprintf(fid, '%1.0f, %1.8f, %1.8f\n', nodes(i, :));
+end
+
+% Write elements#.csv specifying frame number (currently all similar - done for further possible use).
+csvfile = ['elements#', frame_str, '.csv'];
+csvPath = 'E:\Ran\Cell-ECM_model_2D_1_cell\csvFiles\DCR\DCR_elements\';
+csvPath = [csvPath, csvfile];
+dlmwrite(csvPath, elements, 'precision', '%1.0f');
+
+%% E. Re-model and Redefine
+
+% Write remodeled nodes into inp file
+
+inpPath = 'E:\Ran\Cell-ECM_model_2D_1_cell\csvFiles\DCR\DCR_inp\';
+fn = strcat(inpPath, lastfile); % set path to read last frame's inp file
+inp = fileread(fn); % read last frame's inp file
+fn = [inpPath, currfile]; % set path to write to current inp file
+Splt_n_Push(fn, inp, newNodes, '*Node', '*Element'); % write to current inp file
+RemBlnkLines(fn); % remove blank rows from current inp file and close the file
+
+% Re-define BCs (under construction)
+% re-calculate the new cell's center of mass (COM) coordinates.
+% define cell constriction COM
+% store COMs (in DCR config path)
 
 end
 

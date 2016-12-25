@@ -2,7 +2,6 @@
 
 tic
 close all
-clear all
 clc
 
 f = 1; % figure #
@@ -67,10 +66,10 @@ for i = 1 : ll
        
         if isempty(strfind(config.modelType, 'BCE'))
             % Generate basic elements
-            bEl = GenEl2d_v2(Nodes, config, 1);
+            bEl = GenEl2d_v2_HT(Nodes, config, 1);
             
             % Generate oblique elements
-            oEl = GenEl2d_v2(Nodes, config, sqrt(2));
+            oEl = GenEl2d_v2_HT(Nodes, config, sqrt(2));
             
             % Add index to element vector
             El = vertcat(bEl, oEl);
@@ -124,6 +123,7 @@ for i = 1 : ll
         FN = GenFileName(config.ROR(j)/config.regParams.iSeed, config.LOC(i),...
             config.terms.Cells, config.cells, config.Cells_Information.Distance_between_Cells,...
             config.modelType, config.blMatProp.type, config.terms.BCE_Mag);
+        config.fn = FN;
         [ mat ] = defmat(config, FN);
         
         %% Generate node-sets from inner nodes
