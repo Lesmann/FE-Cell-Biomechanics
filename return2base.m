@@ -12,9 +12,9 @@ function [ ch ] = return2base( base )
 isbase = strcmp(CO, base);
 if ~isbase
     cd(base); % initialize Matlab's path to base
-    ch = True;
+    ch = true;
 else
-    ch = False;
+    ch = false;
 end
 
 

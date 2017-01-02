@@ -1,4 +1,4 @@
-function [ frame newNodes ] = Remodel( field, frame, config )
+function [ frame, newNodes ] = Remodel( field, frame, paths )
 
 % This function gets the previous model and its results and remodels
 % it according to a chosen field-output (FO) (e.g. displacement, stress, reaction force or strain fields).
@@ -9,6 +9,8 @@ function [ frame newNodes ] = Remodel( field, frame, config )
 
 %% A. Read data from last frame
 
+config = load(paths.src.config);
+config = config.config; % fix
 frame = frame + 1; % promote frame
 iSeed = config.regParams.iSeed;
 frame_str = num2str(frame);
@@ -18,7 +20,7 @@ currfile = strrep(config.fn, '.inp', '.csv');
 fpath = strcat(gpath, currfile);
 
 % read fields from Abaqus csv file
-Fields = read_fields(fpath); 
+Fields = read_fields(fpath);
 FV = Fields.(field);
 
 % Read last nodes and elements.
@@ -106,6 +108,12 @@ RemBlnkLines(fn); % remove blank rows from current inp file and close the file
 % re-calculate the new cell's center of mass (COM) coordinates.
 % define cell constriction COM
 % store COMs (in DCR config path)
+
+if ~isbase
+    cd 'E:\'; % initialize Matlab's path to base (C:\)
+end
+
+[ ch ] = return2base( base );
 
 end
 

@@ -124,6 +124,8 @@ for i = 1 : ll
             config.terms.Cells, config.cells, config.Cells_Information.Distance_between_Cells,...
             config.modelType, config.blMatProp.type, config.terms.BCE_Mag);
         config.fn = FN;
+        save('E:\Ran\Cell-ECM_model_2D_1_cell\LastConfig\Config.mat', 'config');
+        
         [ mat ] = defmat(config, FN);
         
         %% Generate node-sets from inner nodes

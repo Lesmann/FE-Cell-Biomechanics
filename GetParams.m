@@ -7,7 +7,7 @@ regParams.iSeed = 0.005; % default
 regParams.rect.length = 1; % default
 regParams.rect.width = 1; % default
 
-params = struct('R', regParams.rect.length/2, 'r', 5*regParams.iSeed, 'MOD', 0.1, 'matype', 'required'); % default, MOD = magnitude of displacement (relative to the cell radius)
+params = struct('R', regParams.rect.length/2, 'r', 5*regParams.iSeed, 'MOD', 0.5, 'matype', 'required'); % default, MOD = magnitude of displacement (relative to the cell radius)
 CellInfo.Distance_between_Cells = 'NA';
 
 % bi-linear (linear with buckling) material properties
