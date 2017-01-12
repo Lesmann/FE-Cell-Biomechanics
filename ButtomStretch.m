@@ -6,7 +6,7 @@ Mag = config.terms.BCE_Mag;
 
 if strcmp(s, 'T')
     % bcx = num2str(0);
-    bcy = num2str(-Mag*config.regParams.rect.length/2);
+    bcy = num2str(0);
 elseif strcmp(s, 'C')
     % bcx = num2str(0);
     bcy = num2str(Mag*config.regParams.rect.length/2);

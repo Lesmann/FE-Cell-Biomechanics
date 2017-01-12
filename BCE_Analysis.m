@@ -1,13 +1,13 @@
 function [ Res ] = BCE_Analysis( path )
 
-% This function Analyses bulk-control experiment (BCE) models data and
-% generates the following graphs according to the BCE Type:
+% This function Analyse data from bulk-control experiment models (BCE) and
+% generate the following graphs according to the BCE Type:
 % 1. Poisson's ratio vs. axial strain for uniaxial tension/compression BCEs.
 % 2. Normal vs. shear strain for shear loading BCEs.
 
 % read and calculate reference data
 
-Res.Ref_Data = strain2log_stretch_ratio( path );
+% Res.Ref_Data = strain2log_stretch_ratio( path );
 path2config = 'E:\Ran\Cell-ECM_model_2D_1_cell\csvFiles\Config.mat';
 config = load(path2config);
 Res.config = config.config;
@@ -15,40 +15,48 @@ Res.Ugrad.distance_axis = -Res.config.params.R : Res.config.regParams.iSeed : Re
 rl = Res.config.regParams.rect.length;
 rw = Res.config.regParams.rect.width;
 seed = Res.config.regParams.iSeed;
-l = rl/seed+1;
-w = rw/seed+1;
 
-% Read data from path
+Res.Ref_Data = strain2log_stretch_ratio( path );
+x = Res.Ref_Data.Nodes(:, 1);
+y = Res.Ref_Data.Nodes(:, 2);
 
-[ fnames, rawdata ] = rd( path ); % load data from all files in path
-Res.FileName = fnames;
-
-for i = 1 : length(fnames)
+for i = 1 : length(Res.Ref_Data.Data)
     
-    Res.Ref_Data(i) = strain2log_stretch_ratio( path );
-    Res.Data(i) = dd( rawdata(i, :) ); % extract and divide data
+    ux = cell2mat(Res.Ref_Data.Data(i).U_U1);
+    Res.Metadata(i).ux = ux;
+    uy = cell2mat(Res.Ref_Data.Data(i).U_U2);
+    Res.Metadata(i).uy = uy;
     
-    U_mat = reshape(Res.Data(i).U_Magnitude, [l, w]); % turn displacement vector into square-matrix
-    U1_mat = reshape(Res.Data(i).U_U1, [l, w]); % turn displacement vector into square-matrix
-    U2_mat = reshape(Res.Data(i).U_U2, [l, w]); % turn displacement vector into square-matrix
-    x_coor = reshape(Res.Ref_Data(i).Nodes(:, 1), [l, w]);
-    y_coor = reshape(Res.Ref_Data(i).Nodes(:, 2), [l, w]);
+    % Compute apparent strains (Axial and Transversal) - according to us
+    % Res.Lesman.strain.Ax(i) = ...
+    % Res.element_length.after(i).y-Res.element_length.before(i).y...
+    % ./Res.element_length.before(i).y;
+    % L_Ax = Res.Lesman.strain.Ax(i);
+    %
+    % Res.Lesman.strain.Trans(i) = ...
+    % Res.element_length.after(i).x-Res.element_length.before(i).x...
+    % ./Res.element_length.before(i).x;
+    % L_Trans = Res.Lesman.strain.Trans(i);
+    %
+    % Res.Lesman.EPR(i) = -(L_Trans/L_Ax);
     
-    Res.Mat.Data(i).U_mat = cell2mat(U_mat);
-    Res.Mat.Data(i).U1_mat = cell2mat(U1_mat);
-    Res.Mat.Data(i).U2_mat = cell2mat(U2_mat);
-    Res.Mat.Data(i).x_coor = x_coor;
-    Res.Mat.Data(i).y_coor = y_coor;
+    % compute average stress
+    max_principle_stress = cell2mat(Res.Ref_Data.Data(i).S_Mises);
+    Avg_s = mean(max_principle_stress);
+    Res.Les.Avg_s(i) = mean(Avg_s);
     
-    % calculate average of each row and column in displacement matrix 
-    Res.Ugrad(i).avg_col = mean(Res.Mat.Data(i).U_mat, 1); % gradient in x
-    Res.Ugrad(i).avg_row = mean(Res.Mat.Data(i).U_mat, 2); % gradient in y
+    % Compute apparent strains (Axial and Transversal) - according to Jacob
+    J_Ax = polyfit(y', uy, 1);
+    Res.fit.Ax.A(i) = J_Ax(1);  % Apparent axial strain
+    Res.fit.Ax.B(i) = J_Ax(2);
     
-    % Effective Poisson's Ratio
-    % Res.Ugrad(i).EPR = Res.Ugrad(i).avg_row'./Res.Ugrad(i).avg_col;
-    Res.Ugrad(i).EPR = 'Under Construction';
-      
-end
+    % Calculate the effective Poisson's ratio - according to Jacob
+    J_Trans = polyfit(x', ux, 1);
+    Res.fit.Trans.A(i) = J_Trans(1); % Apparent transversal strain
+    Res.fit.Trans.B(i) = J_Trans(2);
+    Res.Jacob.EPR(i) = -(J_Trans(1)/J_Ax(1));
+    
+    end
 
 end
 

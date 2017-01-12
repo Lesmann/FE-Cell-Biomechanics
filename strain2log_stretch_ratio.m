@@ -5,9 +5,9 @@ function [ Res ] = strain2log_stretch_ratio( path )
 
 % path = path to data files from which Nf will be extracted.
 
-ArchivePath = 'E:\Ran\Cell-ECM_model_2D_1_cell\csvFiles\';
-Npath = strcat(ArchivePath, 'nodes.csv');
-Epath = strcat(ArchivePath, 'elements.csv');
+csvArchivePath = 'E:\Ran\Cell-ECM_model_2D_1_cell\csvFiles\';
+Npath = strcat(csvArchivePath, 'nodes.csv');
+Epath = strcat(csvArchivePath, 'elements.csv');
 Ni = csvread(Npath);
 E = csvread(Epath);
 
@@ -28,11 +28,12 @@ end
 
 for i = 1 : length(fnames)
     
-    data(i) = dd( rawdata(i, :) ); % extract displacement data from rawdata
+    Res.files{i} = fnames{i};
+    Res.Data(i) = dd( rawdata(i, :) ); % extract displacement data from rawdata
     
     % calculate final element length for each data-set
-    Nfx = Ni(:, 1)' + cell2mat(data(i).U_U1);
-    Nfy = Ni(:, 2)' + cell2mat(data(i).U_U2);
+    Nfx = Ni(:, 1)' + cell2mat(Res.Data(i).U_U1);
+    Nfy = Ni(:, 2)' + cell2mat(Res.Data(i).U_U2);
 
     
     for j = 1 : length(E)

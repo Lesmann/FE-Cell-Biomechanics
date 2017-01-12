@@ -3,7 +3,7 @@ function [ config ] = GetParams ()
 % This function generates the parameters required for the model.
 % Units: length - mm, force - N, pressure - MPa
 
-regParams.iSeed = 0.005; % default
+regParams.iSeed = 0.05; % default
 regParams.rect.length = 1; % default
 regParams.rect.width = 1; % default
 
