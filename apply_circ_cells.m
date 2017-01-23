@@ -15,7 +15,7 @@ for i = 1 : length(unique(ic(:, 1)))
     oic{i} = ic(ic(:, 1)==i, end);
 end
 
-for i = 1 : length(circNodes)
+for i = 1 : length(oic)
     
     cic = oic{i};
     

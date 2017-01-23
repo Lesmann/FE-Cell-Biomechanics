@@ -6,7 +6,12 @@ Mag = config.terms.BCE_Mag;
 
 if strcmp(s, 'T')
     % bcx = num2str(0);
+    
+    % tension model type A
     bcy = num2str(0);
+    
+    % tension model type B and C
+    % bcy = num2str(-Mag*config.regParams.rect.length/2);
 elseif strcmp(s, 'C')
     % bcx = num2str(0);
     bcy = num2str(Mag*config.regParams.rect.length/2);

@@ -47,7 +47,7 @@ for i = 1 : ll
         tic;
         
         % Adjusting cell coordinates (to apply cell symmetry)
-        if ~isempty(config.cells) % a single cell
+        if strcmp(config.terms.Cells, 'yes') % a single cell
             [circNodes, config.cells] = AdjustMCC(config, Nodes);
         end
         [ Nodes, ~, oc ] = RemoveNodes2(Nodes, config);

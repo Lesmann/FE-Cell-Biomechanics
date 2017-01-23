@@ -33,12 +33,12 @@ for i = 1 : nTotal % Go over all nodes
                 nodes(i, 2) = newy;
             end
         else
-            % if abs(x) < config.params.R-3*config.regParams.iSeed ...
-                    % && abs(y) < config.params.R-3*config.regParams.iSeed
+            if abs(x) < config.params.R-0.5*config.regParams.iSeed ...
+                    && abs(y) < config.params.R-0.5*config.regParams.iSeed
                 [ newx, newy ] = cirrdn(x, y, ROR); % Generate coordinates of new node inside the circle
                 nodes(i, 1) = newx; % Initiate coordinates to nodes vector
                 nodes(i, 2) = newy;
-            % end
+            end
         end
     end
 end

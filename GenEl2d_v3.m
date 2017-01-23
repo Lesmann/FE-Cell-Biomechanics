@@ -1,4 +1,4 @@
-function el = GenEl2d_v3( nodes, config )
+function el = GenEl2d_v3( nodes, config, dimensions )
 
 % this function is dedicated to Yossi Tokash, the greatest brother at all
 % times... (see dedicated comments)
@@ -10,11 +10,13 @@ function el = GenEl2d_v3( nodes, config )
 
 numat = 1 : length(nodes);
 % n = sqrt(length(nodes));
+% l = dimensions.length;
+% w = dimensions.width;
 l = config.regParams.rect.length;
 w = config.regParams.rect.width;
 seed = config.regParams.iSeed;
-nl = l/seed+1;
-nw = w/seed+1;
+nl = round(l/seed+1);
+nw = round(w/seed+1);
 numat = reshape(numat, nw, nl);
 numat = numat';
 
