@@ -1,4 +1,4 @@
-% created by Hanan Tokash; adapted by Ran Sopher, 18-Jul-2016
+% created by Hanan Tokash; adapted by Ran Sopher
 
 tic
 close all
@@ -13,27 +13,34 @@ f = 1; % figure #
 % To accomplish that, you should:
 % 1. build a model in abaqus and submit it to generate a general inp file.
 % 2. copy the inp file into the destination folder defined by 'fn'.
-%
+
 % ** Note that definitions like element and material types should match the definitions of your model **
 % ** T2D2 elements and linear or hyperelastic material **
 
 %% Get Parameters
 
-display('Defining required paramters...')
+disp('Defining required paramters...')
 
 [ config ] = GetParams(); %% HERE
 
 ll = length(config.LOC);
 lr = length(config.ROR);
+ld = length(config.cells);
+if ld == 0
+    ld = 1;
+    config.cells = {};
+end
 
 tic
 for i = 1 : ll
     for j = 1 : lr
+        for k = 1 : ld
         %% Generate Nodes
         
-        display(['generating model ', num2str(i), '-', num2str(j)]);
-        display(['out of ', num2str(lr), '-', num2str(ll), '...'])
-        display('Generating nodes...');
+        display(['generating model ', num2str(i), '-', num2str(j), '-', num2str(k)]);
+        disp(['out of ', num2str(lr), '-', num2str(ll), '-', num2str(ld), '...'])
+        
+        disp('Generating nodes...');
         
         tic
         
@@ -42,15 +49,15 @@ for i = 1 : ll
         
         %% Handle Nodes
         % Eliminating nodes that exceed the limit of radius
-        display('Handling nodes');
-        display('Generating cells');
+        disp('Handling nodes');
+        disp('Generating cells');
         tic;
         
         % Adjusting cell coordinates (to apply cell symmetry)
         if strcmp(config.terms.Cells, 'yes') % a single cell
-            [circNodes, config.cells] = AdjustMCC(config, Nodes);
+            [circNodes, config.cells{k}] = AdjustMCC(config, Nodes, k);
+            [ Nodes, ~, oc ] = RemoveNodes2(Nodes, config, k);
         end
-        [ Nodes, ~, oc ] = RemoveNodes2(Nodes, config);
         
         if strcmp(config.terms.sqReg, 'no')
             Nodes = remSqReg(Nodes, config);
@@ -59,7 +66,7 @@ for i = 1 : ll
         t_handle_nodes = toc/60;
         
         %% Generate Elements
-        display('Generating elements');
+        disp('Generating elements');
         tic;
         
         %% Generate elements according to specified distance (between nodes)
@@ -91,8 +98,8 @@ for i = 1 : ll
         
         %% Randomize Nodes Locations - Add Randomness
         tic
-        display('Applying Randomness');
-        Nodes = Randomness2d( Nodes, config, config.ROR(j) ); % Adds randomness to element length
+        disp('Applying Randomness');
+        Nodes = Randomness2d( Nodes, config, config.ROR(j), k ); % Adds randomness to element length
         
         % Add index to node vector (if needed)
         [l, w] = size(Nodes);
@@ -102,14 +109,14 @@ for i = 1 : ll
         t_randomness = toc/60;
         
         %% Handle Elements
-        display('Handling elements');
+        disp('Handling elements');
         tic;
         
         % Remove over-defined elements if there are any
         El = ROD(El, Nodes); % ROD = Remove over-defined
                 
         %% Delete elements in random - reduce connectivity
-        display('Applying Connectivity');
+        disp('Applying Connectivity');
         ConnRange = [config.params.R, config.params.r+2*config.regParams.iSeed];
         El = Connectivity(El, Nodes, ConnRange, config.LOC(i), config);
         
@@ -119,9 +126,18 @@ for i = 1 : ll
         
         %% Define material properties and take care of non-linear geometry flag - under construction
         
-        display('Generating Material Properties')
+        disp('Generating Material Properties')
+        
+        if ~isempty(config.cells)
+            num_of_cells = config.cells{k};
+            distance_between_cells = config.Cells_Information.Distance_between_Cells(k);
+        else
+            num_of_cells = 0;
+            distance_between_cells = 0;
+        end
+        
         FN = GenFileName(config.ROR(j)/config.regParams.iSeed, config.LOC(i),...
-            config.terms.Cells, config.cells, config.Cells_Information.Distance_between_Cells,...
+            config.terms.Cells, num_of_cells, distance_between_cells,...
             config.modelType, config.blMatProp.type, config.terms.BCE_Mag);
         config.fn = FN;
         save('E:\Ran\Cell-ECM_model_2D_1_cell\LastConfig\Config.mat', 'config');
@@ -135,7 +151,9 @@ for i = 1 : ll
         if isempty(config.cells) && strcmp(config.terms.Cells, 'yes')% i.e., a model of a single cell
             ic = Nicirc(El.new, Nodes, config);  % 'ic' just gives node numbers
         else
-            ic = Nicirc2(El.new, Nodes, config); % ic just gives both node numbers (column 2) and cell numbers (column 1)
+            if strcmp(config.terms.Cells, 'yes')
+                ic = Nicirc2(El.new, Nodes, config, k); % ic just gives both node numbers (column 2) and cell numbers (column 1)
+            end
         end
         config.Cells_Information.cell_nodes = ic;
         
@@ -182,12 +200,12 @@ for i = 1 : ll
         
         if strcmp(config.terms.Cells, 'yes')
             if strcmp(config.terms.Contraction,'U') % if the UBCs/LBCs of the model are BCs
-                display('Generating Boundary Conditions');
+                disp('Generating Boundary Conditions');
                 tic;
                 if isempty(config.cells) % a single cell
                     [ BCs, bcNames ] = GenBCs(ic, Nodes, config);
                 else % multiple cells
-                    [ BCs, bcNames ] = GenBCs2(ic, Nodes, config);
+                    [ BCs, bcNames ] = GenBCs2(ic, Nodes, config, k);
                 end
                 fn = 'E:\Ran\Cell-ECM_model_2D_1_cell\csvFiles\BCs.txt';
                 fid = fopen(fn, 'wt');
@@ -198,10 +216,10 @@ for i = 1 : ll
                 Loads = 'Not required for this type of model';
                 fclose('all');
             else % if the BCs/LCs of the model are LCs
-                display('Generating Loads');
+                disp('Generating Loads');
                 tic;
-                [ Loads ] = GenLoads2(ic, config.cells);
-                [ TFLoads ] = GenLoads2(oc, config.cells);
+                [ Loads ] = GenLoads2(ic, config.cells{k});
+                [ TFLoads ] = GenLoads2(oc, config.cells{k});
                 fn = 'E:\Ran\Cell-ECM_model_2D_1_cell\csvFiles\Loads.txt';
                 fid = fopen(fn, 'wt');
                 fprintf(fid, Loads);
@@ -219,7 +237,7 @@ for i = 1 : ll
         
         %% Generate boundary conditions on outer nodes
         
-        display('Generating Fixation Boundary Conditions');
+        disp('Generating Fixation Boundary Conditions');
         if strcmp(config.modelType,'FBC')
             [ fixationBCs, bcNames ] = GenfixationBCs(ECMc, Nodes);
         end
@@ -228,11 +246,17 @@ for i = 1 : ll
         % (Also writes data(nodes, elements and weak and normal elements)
         % to .csv files)
         
-        display('Writing into .inp file');
+        disp('Writing into .inp file');
         tic;
         
+        if isempty(config.cells)
+            celloc = 0;
+        else
+            celloc = config.cells{k};
+        end
+        
         input = struct('nodes', Nodes, 'elements', El.new, 'Nsets', icNsets, ...
-            'BCs', BCs, 'Loads', Loads, 'FN', FN, 'Celloc', config.cells,...
+            'BCs', BCs, 'Loads', Loads, 'FN', FN, 'Celloc', celloc,...
             'withCells', config.terms.Cells, 'contraction', config.terms.Contraction,...
             'mat', mat.mats, 'matype', config.params.matype, 'damping', config.params.damping);
         
@@ -245,11 +269,12 @@ for i = 1 : ll
         ti = sum(t);
         T(j) = ti;
         tti = num2str(ti);
-        display(['model file: ', FN, ' was generated successfully']);
-        display(['Elasped time: ', tti, ' minutes']);
+        disp(['model file: ', FN, ' was generated successfully']);
+        disp(['Elasped time: ', tti, ' minutes']);
         
+        end
     end
 end
 tt = num2str(sum(T));
-display('Process is completed successfully');
-display(['Total Time is: ', tt, ' minutes']);
+disp('Process is completed successfully');
+disp(['Total Time is: ', tt, ' minutes']);

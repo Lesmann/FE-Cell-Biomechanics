@@ -26,25 +26,23 @@ right = numat(:, 2:end); % get right sub-matrix
 left = numat(:, 1:end-1); % get left sub-matrix
 top_left = numat(1:end-1, 1:end-1); % get top-left sub-matrix
 top_right = numat(1:end-1, 2:end); % get top-right sub-matrix
-bottom_left = numat(2:end, 1:end-1); % get bottom-left sub-matrix
-bottom_right = numat(2:end, 2:end); % get bottom-right sub-matrix
+buttom_left = numat(2:end, 1:end-1); % get bottom-left sub-matrix
+buttom_right = numat(2:end, 2:end); % get top sub-matrix
 
-% reshape matrices into vectors
-row_top = reshape(top, [], 1);  
-row_buttom = reshape(bottom, [], 1);
+row_top = reshape(top, [], 1);
+row_buttom = reshape(buttom, [], 1);
 row_right =  reshape(right, [], 1);
 row_left =  reshape(left, [], 1);
 row_top_right = reshape(top_right, [], 1);
 row_top_left = reshape(top_left, [], 1);
-row_bottom_right = reshape(bottom_right, [], 1);
-row_bottom_left = reshape(bottom_left, [], 1);
+row_buttom_right = reshape(buttom_right, [], 1);
+row_buttom_left = reshape(buttom_left, [], 1);
 
-% create vertical and horizontal elements by assigning node numbers
-vel = horzcat(row_top, row_bottom);
+vel = horzcat(row_top, row_buttom);
 hel = horzcat(row_right, row_left);
 
-oel_rl = horzcat(row_top_right, row_bottom_left);
-oel_lr = horzcat(row_top_left, row_bottom_right);
+oel_rl = horzcat(row_top_right, row_buttom_left);
+oel_lr = horzcat(row_top_left, row_buttom_right);
 
 el = vel;
 el = vertcat(el, hel);

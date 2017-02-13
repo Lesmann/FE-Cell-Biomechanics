@@ -10,8 +10,8 @@ for i = 1 : length(Nodes)
     x = currNode(1);
     y = currNode(2);
     d = sqrt(x^2+y^2);
-    inc1 = config.params.R-d; % if the node is outside the bigger circle
-    if inc1 <= 1e-4
+    inc = config.params.R-d; % if the node is outside the bigger circle
+    if inc <= 1e-7
         indx(k) = i; % save serial number of the node
         k=k+1;
     end   

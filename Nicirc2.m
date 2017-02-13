@@ -1,4 +1,4 @@
-function [ inCirc ] = Nicirc2 ( Elements, Nodes, config )
+function [ inCirc ] = Nicirc2 ( Elements, Nodes, config, idfo )
 
 % This function finds and returns a vector containing the serial numbers of
 % the nodes forming the cell boundaries (column 2) and the cell they are
@@ -9,10 +9,13 @@ El = Elements(:, 2:3); % a list of all elements as defined by their nodes
 N = Nodes(:, 2:3); % a list of node coordinates
 inCirc = [];
 r = config.params.r;
-cellCoordinates = config.cells;
+if ~isempty(config.cells)
+    cellCoordinates = config.cells{idfo};
+end
+[l_cell, ~] = size(cellCoordinates);
 iSeed = config.regParams.iSeed;
 
-for j = 1 : length(cellCoordinates) % going through all cells
+for j = 1 : l_cell % going through all cells
     for i = 1 : length(N) % going through all nodes
         
         e = El==i; % creating a matrix in which i is 1 and the rest is all 0-s

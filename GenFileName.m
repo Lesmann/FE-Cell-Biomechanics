@@ -32,10 +32,10 @@ else
     newfile = strcat('M',strMag,'_', newfile);
 end
 if strcmp(withCells, 'yes')
-    if isempty(numofCells)
+    [numofCells, ~]=size(numofCells);
+    if numofCells==1
         strnumofCells = '1cell';
     else
-        numofCells=length(numofCells);
         strnumofCells=strcat(num2str(numofCells),'cells');
     end
 else

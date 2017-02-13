@@ -6,8 +6,9 @@ function circNodes = const2circular(pts, config)
 
 r = config.params.r;
 th = 0:2*pi/100000:2*pi;
+[l, ~] = size(pts);
 
-for i = 1 : length(pts)
+for i = 1 : l
     
     x = pts(i, 1);
     y = pts(i, 2);

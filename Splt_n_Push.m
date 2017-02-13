@@ -1,4 +1,4 @@
-function [] = Splt_n_Push( fn, inp, data, str1, str2 )
+function [inp] = Splt_n_Push( fn, inp, data, str1, str2 )
 
 % Split and parse .inp file into 2 halves
 

@@ -288,19 +288,25 @@ for l=1:length(filenames) %length(filenames)
     anglefraction_minprincipalstrain(l)=sum_minprincipalstrain_angle/sum_minprincipalstrain;
     
     %% Calculating moments within the ROI around the cell
+    % shifting the cell to the centre
     centroids_ROI_shifted=centroids_ROI;
     centroids_ROI_shifted(:,2)=centroids_ROI_shifted(:,2)-mean(centroids_ROI_shifted(:,2));
     centroids_ROI_shifted(:,3)=centroids_ROI_shifted(:,3)-mean(centroids_ROI_shifted(:,3));
+    % M0
     zeromoment_maxprincipalstrain(l)=sum_maxprincipalstrain;
     zeromoment_minprincipalstrain(l)=sum_minprincipalstrain;
+    % M1
     firstmoment_x_maxprincipalstrain(l)=(centroids_ROI_shifted(:,2)'*centroids_ROI_shifted(:,4));
     R_x_maxprincipalstrain(l)=firstmoment_x_maxprincipalstrain(l)/zeromoment_maxprincipalstrain(l);
     firstmoment_y_maxprincipalstrain(l)=(centroids_ROI_shifted(:,3)'*centroids_ROI_shifted(:,4));
     R_y_maxprincipalstrain(l)=firstmoment_y_maxprincipalstrain(l)/zeromoment_maxprincipalstrain(l);
     firstmoment_x_minprincipalstrain(l)=(centroids_ROI_shifted(:,2)'*centroids_ROI_shifted(:,5));
+    R_maxprincipalstrain=sqrt(R_x_maxprincipalstrain^2+R_y_maxprincipalstrain^2)
     R_x_minprincipalstrain(l)=firstmoment_x_minprincipalstrain(l)/zeromoment_minprincipalstrain(l);
     firstmoment_y_minprincipalstrain(l)=(centroids_ROI_shifted(:,3)'*centroids_ROI_shifted(:,5));
     R_y_minprincipalstrain(l)=firstmoment_y_minprincipalstrain(l)/zeromoment_minprincipalstrain(l);
+    R_minprincipalstrain=sqrt(R_x_minprincipalstrain^2+R_y_minprincipalstrain^2)
+    % M2
     secondmoment_xx_maxprincipalstrain(l)=((centroids_ROI_shifted(:,3).^2)'*centroids_ROI_shifted(:,4));
     R_xx_maxprincipalstrain(l)=sqrt(secondmoment_xx_maxprincipalstrain(l)/zeromoment_maxprincipalstrain(l));
     secondmoment_yy_maxprincipalstrain(l)=((centroids_ROI_shifted(:,2).^2)'*centroids_ROI_shifted(:,4));

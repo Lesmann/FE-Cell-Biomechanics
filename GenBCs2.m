@@ -1,4 +1,4 @@
-function [ BCs, bcNames ] = GenBCs2 (ic, N, config)
+function [ BCs, bcNames ] = GenBCs2 (ic, N, config, idfo)
 
 % This function uses 'ic' to generate the boundary conditions to
 % be applied on the inner-circles' node sets
@@ -19,12 +19,12 @@ function [ BCs, bcNames ] = GenBCs2 (ic, N, config)
 %%
 
 l = length(ic);
-lpts = length(config.cells);
+lpts = length(config.cells{idfo});
 
 for i = 1: l % going through all nodes on the cells' edges in order to assign them with a BC
     coor = N(ic(i,2), :); % extracting the node (serial number and coordinates)
     currentCell = ic(i,1);
-    p = config.cells(currentCell,:); % extracting the coordiantes of the centre of the current cell
+    p = config.cells{idfo}(currentCell,:); % extracting the coordiantes of the centre of the current cell
     if i == 1
         bcNames = strcat('ns', num2str(ic(i,2)));
         BCs = strcat('** Name: BC', num2str(ic(i,2)));

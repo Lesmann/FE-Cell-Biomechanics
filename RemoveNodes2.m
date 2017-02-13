@@ -1,4 +1,4 @@
-function [ newNodes, rNodes, RNodes ] = RemoveNodes2 ( N, config )
+function [ newNodes, rNodes, RNodes ] = RemoveNodes2 ( N, config, idfo )
 
 % This function removes nodes from vector 'nodes'
 % that their distance is smaller than the inner radius 'r'
@@ -7,13 +7,13 @@ function [ newNodes, rNodes, RNodes ] = RemoveNodes2 ( N, config )
 k = 1;
 c = 1;
 l = length(N);
-if isempty(config.cells)
-   config.cells = min(abs(N));
+if isempty(config.cells{idfo})
+   config.cells{idfo} = min(abs(N));
 end
-[ lpts, ~ ] = size(config.cells); % practically the number of cells contained in the model
+[ lpts, ~ ] = size(config.cells{idfo}); % practically the number of cells contained in the model
 rNodes = 0;
 for i = 1 : lpts % for each cell
-    pt = config.cells(i, :); % extracting the coordinates of the center of the current cell
+    pt = config.cells{idfo}(i, :); % extracting the coordinates of the center of the current cell
     for j = 1 : l % for each cell, we go through all nodes we have in space 
         x = N(j, 1); % extract coordinates of the current node
         y = N(j, 2);

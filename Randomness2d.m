@@ -1,4 +1,4 @@
-function [ newNodes ] = Randomness2d ( nodes, config, ROR )
+function [ newNodes ] = Randomness2d ( nodes, config, ROR, idfo )
 
 % This function gets a vector of coordinates 'Nodes' and Radius Of Randomness ('ROR')
 % and returns a new vector 'newNodes' in which the coordinates are
@@ -11,10 +11,11 @@ for i = 1 : nTotal % Go over all nodes
     D = sqrt(x^2 + y^2); % Calculate the distance from origin (for a single cell case)
     % if not a single-cell-model, consider distance from current cell's center
     if ~isempty(config.cells)
-        lcells = length(config.cells);
+        [l, ~] = size(config.cells{idfo});
+        lcells = l;
         for j = 1 : lcells
-            xcell = config.cells(j, 1);
-            ycell = config.cells(j, 2);
+            xcell = config.cells{idfo}(j, 1);
+            ycell = config.cells{idfo}(j, 2);
             currx = x - xcell;
             curry = y - ycell;
             d(j) = sqrt(currx^2+curry^2); % distances of the current node from all cell centres

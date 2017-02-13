@@ -47,10 +47,6 @@ RemBlnkLines(fn);
 inp = fileread(fn);
 Splt_n_Push(fn, inp, input.mat, '** MATERIALS',...
     '** ----------------------------------------------------------------');
-if ~strcmp(input.matype, 'e')
-    strrep(inp, 'nlgeom=NO', 'nlgeom=YES, inc=1000')
-end
-RemBlnkLines(fn);
 
 %% Insert step properties into inp file
 
@@ -126,6 +122,36 @@ else
     end
 end
 
+% Re-define model type (none-liner) and number of increments
+inp = fileread(fn);
+if ~strcmp(input.matype, 'LE')
+    if ~isempty(strfind(inp, 'nlgeom=NO'))
+        inp = strrep(inp, 'nlgeom=NO', 'nlgeom=YES, inc=1000');
+    else
+        inp = strrep(inp, 'nlgeom=YES', 'nlgeom=YES, inc=1000');
+    end
+else
+    inp = strrep(inp, 'nlgeom=YES', 'nlgeom=NO');
+end
+
+fid = fopen(fn, 'wt');
+fprintf(fid, inp); % write nodes into file
+fclose(fid);
+RemBlnkLines(fn);
+
+% Re-define element's cross-sectional area
+if config.blMatProp.cs_area ~= 1
+   csa = [num2str(config.blMatProp.cs_area), ','];
+   str1 = '*Solid Section, elset=NORMALELEMENTS, material="Normal Elastic"';
+   str2 = '** Section: Weak';
+   Splt_n_Push(fn, inp, csa, str1, str2);
+   inp = fileread(fn);
+   str1 = '*Solid Section, elset=WEAKELEMENTS, material="Weak Elastic"';
+   str2 = '*End Part';
+   Splt_n_Push(fn, inp, csa, str1, str2);
+   RemBlnkLines(fn);
+end
+
 % Insert Node sets into inp file
 
 if strcmp(input.withCells, 'yes')
@@ -176,6 +202,8 @@ if ~isempty(strfind(config.modelType, 'BCE'))
     Splt_n_Push(fn, inp, Nsets, str1, str2);
     RemBlnkLines(fn);
 end
+
+RemBlnkLines(fn);
 
 %% Finalize Editing by Removing Blank Lines From inp File - ABAQUS will NOT Compile
 

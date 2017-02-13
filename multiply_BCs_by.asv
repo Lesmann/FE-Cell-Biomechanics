@@ -1,0 +1,15 @@
+function [ m_BCs ] = multiply_BCs_by( times )
+
+% This function reads the boundary condition txt file currently exist in the csv file
+% library and multiplies it by the input argument 'times'
+
+path = 'E:\Ran\Cell-ECM_model_2D_1_cell\csvFiles\BCs.txt';
+bcs = fileread(path);
+
+bcs = strsplit(bcs, '\n');
+for i = 1 : length(bcs)
+   if 
+end
+
+end
+
