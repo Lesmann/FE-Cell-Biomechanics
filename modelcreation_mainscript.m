@@ -45,6 +45,7 @@ for i = 1 : ll
         tic
         
         Nodes = GenNodes2d(config);
+        
         t_generate_nodes = toc/60;
         
         %% Handle Nodes
@@ -91,9 +92,13 @@ for i = 1 : ll
         if ~isempty(strfind(config.modelType, 'BCE'))
             nBCE = Edges(Nodes, config);
             rBCENsets = GenNSets(nBCE.Right, 'rBCENsets.txt');
-            lBCENsets = GenNSets(nBCE.Left, 'lBCENsets.txt');
+            lBCENsets = GenNSets(nBCE.Left, 'lBCENsets.txt');bBCENsets
             tBCENsets = GenNSets(nBCE.Top, 'tBCENsets.txt');
             bBCENsets = GenNSets(nBCE.Buttom, 'bBCENsets.txt');
+        end
+        
+        if strcmp(config.regParams.rotate, 'y')
+            Nodes = rotate_model(Nodes, config.regParams.rotation_angle);
         end
         
         %% Randomize Nodes Locations - Add Randomness
@@ -153,9 +158,9 @@ for i = 1 : ll
         else
             if strcmp(config.terms.Cells, 'yes')
                 ic = Nicirc2(El.new, Nodes, config, k); % ic just gives both node numbers (column 2) and cell numbers (column 1)
+                config.Cells_Information.cell_nodes = ic;
             end
         end
-        config.Cells_Information.cell_nodes = ic;
         
         if strcmp(config.terms.Cells, 'yes')
             Nodes = apply_circ_cells(ic, circNodes, Nodes); % Make cell symmetric-circular

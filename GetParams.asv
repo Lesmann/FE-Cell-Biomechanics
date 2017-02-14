@@ -4,15 +4,15 @@ function [ config ] = GetParams ()
 % Units: length - mm, force - N, pressure - MPa
 
 regParams.iSeed = 1; % default
-regParams.rect.length = 200; % default
-regParams.rect.width = 200; % default
+regParams.rect.length = 1; % default
+regParams.rect.width = 1; % default
 
-params = struct('R', regParams.rect.length/2, 'r', 5*regParams.iSeed, 'MOD', 0.15, 'matype', 'required'); % default, MOD = magnitude of displacement (relative to the cell radius)
+params = struct('R', regParams.rect.length/2, 'r', 5*regParams.iSeed, 'MOD', 0.1, 'matype', 'required'); % default, MOD = magnitude of displacement (relative to the cell radius)
 CellInfo.Distance_between_Cells = 'NA';
 
 % bi-linear (linear with buckling) material properties
 blmatprop = struct('ymod', 1, 'poisr', 0.45, 'type', 'bi-linear',...
-    'n', 1000, 'r', 0.9999, 'rho', 0.1, 'cs_area', regParams.iSeed10);
+    'n', 1000, 'r', 0.9999, 'rho', 0.1, 'cs_area', pi*regParams.iSeed^2/400);
 
 disp('Model type');
 model = input('BCE (bulk control experiment model) / TFBC (traction-free boundary conditions) / FBC (fixation boundary conditions) / UD (user-defined): ', 's');
@@ -79,6 +79,9 @@ switch model
         end
         model = strcat(model, '_');
         model = strcat(model, terms.bceType);
+        
+        rotate = input('Rotated model? (y/n)');
+        if rotate = 
         
         disp('BCE displacement magnitude: ')
         terms.BCE_Mag = input('Stretch magnitude: ');

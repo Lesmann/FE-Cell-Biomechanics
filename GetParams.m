@@ -3,7 +3,7 @@ function [ config ] = GetParams ()
 % This function generates the parameters required for the model.
 % Units: length - mm, force - N, pressure - MPa
 
-regParams.iSeed = 0.005; % default
+regParams.iSeed = 1; % default
 regParams.rect.length = 1; % default
 regParams.rect.width = 1; % default
 
@@ -12,7 +12,7 @@ CellInfo.Distance_between_Cells = 'NA';
 
 % bi-linear (linear with buckling) material properties
 blmatprop = struct('ymod', 1, 'poisr', 0.45, 'type', 'bi-linear',...
-    'n', 1000, 'r', 0.9999, 'rho', 0.1, 'cs_area', regParams.iSeed/200);
+    'n', 1000, 'r', 0.9999, 'rho', 0.1, 'cs_area', pi*regParams.iSeed^2/400);
 
 disp('Model type');
 model = input('BCE (bulk control experiment model) / TFBC (traction-free boundary conditions) / FBC (fixation boundary conditions) / UD (user-defined): ', 's');
@@ -79,6 +79,11 @@ switch model
         end
         model = strcat(model, '_');
         model = strcat(model, terms.bceType);
+        
+        regParams.rotate = input('Rotated model (y/n)? ', 's');
+        if strcmp(regParams.rotate, 'y')
+            regParams.rotation_angle = pi/4;
+        end
         
         disp('BCE displacement magnitude: ')
         terms.BCE_Mag = input('Stretch magnitude: ');

@@ -1,6 +1,11 @@
 function [inp] = Splt_n_Push( fn, inp, data, str1, str2 )
 
 % Split and parse .inp file into 2 halves
+% fn - file path and name
+% inp - target file name (inp=fileread(fn))
+% data - what we wand to write
+% str1 - beginning string
+% str2 - end string
 
 Half1 = strsplit(inp, str1);
 if length(Half1)~=2

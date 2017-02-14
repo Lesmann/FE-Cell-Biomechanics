@@ -31,7 +31,7 @@ bottom_right = numat(2:end, 2:end); % get bottom-right sub-matrix
 
 % reshape matrices into vectors
 row_top = reshape(top, [], 1);  
-row_buttom = reshape(bottom, [], 1);
+row_bottom = reshape(bottom, [], 1);
 row_right =  reshape(right, [], 1);
 row_left =  reshape(left, [], 1);
 row_top_right = reshape(top_right, [], 1);
